@@ -168,7 +168,4 @@ def split_data(dat_dir: Path, dataset_name: str, seed: int):
     verify_size_requirements(all_imgs, train_imgs, val_imgs, test_imgs)
     verify_disjoint(train_imgs, val_imgs, test_imgs)
 
-    splits = {"train": train_imgs, "val": val_imgs, "test": test_imgs, "seed": seed}
     print("\n[✓] TASK 1")
-
-    return splits
