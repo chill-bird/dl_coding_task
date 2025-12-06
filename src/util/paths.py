@@ -10,7 +10,7 @@ from pathlib import Path
 
 def root_path() -> Path:
     """Returns root path of the project"""
-    return Path(__file__).parent.parent.resolve()
+    return Path(__file__).parent.parent.parent.resolve()
 
 
 def parse_dat_dir(path: str | Path | None) -> Path:
@@ -18,13 +18,20 @@ def parse_dat_dir(path: str | Path | None) -> Path:
     if path is None:
         root = Path(root_path())
         dat_dir = Path(root / "dat").resolve()
-        print(f"Dat dir not set, using default path at {dat_dir}.")
+        print(f"Dat dir not set, using default path at {dat_dir}.\n")
     else:
         dat_dir = Path(path).resolve()
 
     assert dat_dir.is_dir(), f"Data directory not found at {dat_dir}."
     check_if_datasets_exist(dat_dir)
     return dat_dir
+
+
+def dataset_path(datasets: dict[str, dict], dataset_name: str, dat_dir: Path) -> Path:
+    """Returns dataset directory (subdirectory of dat_dir)"""
+    dataset_dir_name = datasets[dataset_name]["unzip_dirname"]
+    dataset_dir = Path(dat_dir / dataset_dir_name).resolve()
+    return dataset_dir
 
 
 def check_if_datasets_exist(dat_dir: Path):

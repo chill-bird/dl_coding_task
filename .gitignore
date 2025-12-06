@@ -2,6 +2,8 @@
 
 # Project-specific
 dat/**.zip
+dat/**.csv
+dat/**/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
