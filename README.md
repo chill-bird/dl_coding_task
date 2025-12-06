@@ -13,7 +13,8 @@
 ## Run locally
 
 - Activate virtual environment `source .venv/bin/activate`
-- Run project: `python src/main.py -d <ABSOLUTE_PATH_TO_DATASETS>`
+- Set working directory to project root
+- Run project: `python -m src.main -d <ABSOLUTE_PATH_TO_DATASETS>`
 
 ## Run on cluster
 

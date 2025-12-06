@@ -6,10 +6,8 @@ Runs project
 """
 
 import argparse
-import torch
-from util.paths import parse_dat_dir, root_path
-from util.seed import set_seed
-from task1 import split_data
+from src.util.paths import parse_dat_dir, root_path
+from src.task1.split_data import split_data
 
 SEED = 3780947
 DATASET = "euro_sat_ms"
@@ -32,7 +30,7 @@ def main():
     dat_dir = parse_dat_dir(args.dat_dir)
 
     print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}\n")
-    
+
     # Task 1
     split_data(dat_dir, DATASET, seed=SEED)
 
