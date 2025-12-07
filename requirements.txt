@@ -1,5 +1,7 @@
 --find-links https://download.pytorch.org/whl/cpu
 numpy
+pandas
 torch
 torchvision
+scikit-image
 scikit-learn

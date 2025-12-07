@@ -5,3 +5,9 @@ Perform a train-val-test split of the data which depends on a seed parameter, an
 seed so that you and us can reproduce the same split your experiments. Use at least 2500
 images for training, 1000 for validation and 2000 for testing.
 """
+
+# (
+#     print("CUDA available.\n")
+#     if torch.cuda.is_available()
+#     else print("CUDA not available, using CPU...\n")
+# )

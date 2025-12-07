@@ -9,6 +9,7 @@ images for training, 1000 for validation and 2000 for testing.
 from pathlib import Path
 import numpy as np
 from sklearn.model_selection import train_test_split
+from src.util.constants import DATASETS
 from src.util.paths import dataset_path
 from src.util.seed import set_seed
 from src.task1.util import (
@@ -17,27 +18,6 @@ from src.task1.util import (
     verify_disjoint,
     verify_size_requirements,
 )
-
-DATASETS = {
-    # Multispectral TIF
-    "euro_sat_ms": {
-        "zip_filename": "EuroSAT_MS.zip",
-        "unzip_dirname": "EuroSAT_MS",
-        "format": ".tif",
-    },
-    # JPG (RGB)
-    "euro_sat_rgb": {
-        "zip_filename": "EuroSAT_RGB.zip",
-        "unzip_dirname": "EuroSAT_RGB",
-        "format": ".jpg",
-    },
-    # EXAMPLE
-    "flowers": {
-        "zip_filename": "102flowersn.zip",
-        "unzip_dirname": "flowers_data",
-        "format": ".jpg",
-    },
-}
 
 
 def get_filenames_and_classes(dataset_dir: Path, img_format: str) -> tuple[list[Path], list[str]]:
@@ -67,7 +47,7 @@ def get_filenames_and_classes(dataset_dir: Path, img_format: str) -> tuple[list[
             # Collect all image files in this class
             for image_file in sorted(class_dir.iterdir()):
                 if image_file.is_file() and image_file.suffix.lower() == img_format:
-                    image_files.append(f"{class_name}/{image_file.stem}")
+                    image_files.append(f"{class_name}/{image_file.name}")
                     labels.append(class_name)
 
     return image_files, labels
@@ -117,6 +97,16 @@ def create_split_files(
             f.write(f"{file},{label}\n")
 
 
+def create_class_to_index_map(dataset_dir: Path):
+    """Creates lookup for class name to index"""
+
+    with open(dataset_dir / "class_index.csv", "w+", encoding="UTF-8") as f:
+        f.write("class,index\n")
+        for i, class_dir in enumerate(sorted(dataset_dir.iterdir())):
+            if class_dir.is_dir():
+                f.write(f"{class_dir.name},{i}\n")
+
+
 def split_data(dat_dir: Path, dataset_name: str, seed: int):
     """
     Creates stratified train-val-test split of the data located at dat_dir.
@@ -161,8 +151,9 @@ def split_data(dat_dir: Path, dataset_name: str, seed: int):
 
     print("\n[4] Creating Split Files")
     create_split_files(
-        dat_dir, train_imgs, train_labels, val_imgs, val_labels, test_imgs, test_labels
+        dataset_dir, train_imgs, train_labels, val_imgs, val_labels, test_imgs, test_labels
     )
+    create_class_to_index_map(dataset_dir)
 
     print("\n[5] Checking split requirements")
     verify_size_requirements(all_imgs, train_imgs, val_imgs, test_imgs)
