@@ -9,7 +9,7 @@ images for training, 1000 for validation and 2000 for testing.
 from pathlib import Path
 import numpy as np
 from sklearn.model_selection import train_test_split
-from src.util.constants import DATASETS
+from src.constants import DATASETS
 from src.util.paths import dataset_path
 from src.util.seed import set_seed
 from src.task1.util import (

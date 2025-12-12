@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 from pathlib import Path
 
 from src.task2.eurosat_dataset import EuroSatDataset
-from src.util.constants import CLASS_INDEX_FILE
+from src.constants import CLASS_INDEX_FILE
 
 
 def dataloaders(

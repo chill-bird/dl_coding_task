@@ -6,7 +6,7 @@ Runs project
 """
 
 import argparse
-from src.util.constants import (
+from src.constants import (
     BATCH_SIZE,
     CLASS_INDEX_FILE,
     DATASETS,
@@ -17,7 +17,6 @@ from src.util.constants import (
 )
 from src.util.paths import parse_dat_dir, root_path
 from src.task1.split_data import split_data
-from src.task2.train import main as train
 
 DATASET = "euro_sat_ms"
 # DATASET = "euro_sat_rgb"
