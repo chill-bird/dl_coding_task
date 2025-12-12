@@ -17,6 +17,7 @@ from src.constants import (
 )
 from src.util.paths import parse_dat_dir, root_path
 from src.task1.split_data import split_data
+from src.task2.task2 import main as train
 
 DATASET = "euro_sat_ms"
 # DATASET = "euro_sat_rgb"
