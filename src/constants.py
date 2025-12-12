@@ -5,6 +5,8 @@ constants.py
 Provides constants for project.
 """
 
+SEED = 3780947
+
 DATASETS = {
     # Multispectral TIF
     "euro_sat_ms": {
@@ -30,4 +32,8 @@ TEST_FILE = "testfile.csv"
 TRAIN_FILE = "trainfile.csv"
 VAL_FILE = "valfile.csv"
 CLASS_INDEX_FILE = "class_index.csv"
-SPLIT_FILES = TEST_FILE, TRAIN_FILE, VAL_FILE
+SPLIT_FILES = {"test": TEST_FILE, "train": TRAIN_FILE, "val": VAL_FILE}
+
+LEARNING_RATE = 0.001
+EPOCHS = 50
+BATCH_SIZE = 32

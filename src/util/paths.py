@@ -27,6 +27,15 @@ def parse_dat_dir(path: str | Path | None) -> Path:
     return dat_dir
 
 
+def results_parent_dir() -> Path:
+    """
+    Returns path to results parent directory.
+    Files for each run are saved in subdirectories.
+    """
+    path = Path(root_path() / "results").resolve()
+    return path
+
+
 def dataset_path(datasets: dict[str, dict], dataset_name: str, dat_dir: Path) -> Path:
     """Returns dataset directory (subdirectory of dat_dir)"""
     dataset_dir_name = datasets[dataset_name]["unzip_dirname"]
