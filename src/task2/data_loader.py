@@ -9,11 +9,11 @@ from torch.utils.data import DataLoader
 from pathlib import Path
 
 from src.task2.eurosat_dataset import EuroSatDataset
-from src.constants import CLASS_INDEX_FILE
 
 
 def dataloaders(
     dataset_dir: Path,
+    class_index_file_name: str,
     split_files: dict,
     img_format: str,
     aug_dict: dict,
@@ -29,7 +29,7 @@ def dataloaders(
     train_dataset = EuroSatDataset(
         root_dir=dataset_dir,
         split_file=train_file,
-        class_index_file=CLASS_INDEX_FILE,
+        class_index_file=class_index_file_name,
         img_format=img_format,
         transform=aug_dict[aug_name],
     )
@@ -37,7 +37,7 @@ def dataloaders(
     val_dataset = EuroSatDataset(
         root_dir=dataset_dir,
         split_file=val_file,
-        class_index_file=CLASS_INDEX_FILE,
+        class_index_file=class_index_file_name,
         img_format=img_format,
         transform=aug_dict["val"],
     )
@@ -45,7 +45,7 @@ def dataloaders(
     test_dataset = EuroSatDataset(
         root_dir=dataset_dir,
         split_file=test_file,
-        class_index_file=CLASS_INDEX_FILE,
+        class_index_file=class_index_file_name,
         img_format=img_format,
         transform=aug_dict["val"],
     )

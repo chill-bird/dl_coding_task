@@ -1,3 +1,5 @@
+# TODO: Check if it can be deleted
+
 """
 generate_report.py
 ---
@@ -61,7 +63,7 @@ def generate_report(results_dir, output_file=None):
     report.append("- Random horizontal flip (p=0.5)\n")
     report.append("- ImageNet normalization\n\n")
     
-    report.append("#### Strategy 2: Strong Augmentation\n")
+    report.append("#### Strategy 2: Advanced Augmentation\n")
     report.append("- Random horizontal flip (p=0.5)\n")
     report.append("- Random vertical flip (p=0.3)\n")
     report.append("- Random rotation (±20°)\n")

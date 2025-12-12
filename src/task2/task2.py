@@ -1,28 +1,27 @@
 """
 Task 2 - Classification with RGB channels
 
-Perform a train-val-test split of the data which depends on a seed parameter, and use a manual
-seed so that you and us can reproduce the same split your experiments. Use at least 2500
-images for training, 1000 for validation and 2000 for testing.
+Perform a train-val-test split of the data which depends on a seed parameter,
+and use a manual seed so that you and us can reproduce the same split your experiments.
+Use at least 2500 images for training, 1000 for validation and 2000 for testing.
 """
 
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torchvision.models as models
 from torchvision import transforms
 import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path
 from tqdm import tqdm
 import json
 from datetime import datetime
 
-from src.task2.util import index_to_class_map
 from src.task2.data_loader import dataloaders
-from src.task2.plot import plot_training_history
-from src.util.seed import set_seed
+from src.task2.model import get_model
 from src.util.paths import results_parent_dir
+from src.task2.plot import plot_training_history, visualize_top_bottom_images
+from src.util.seed import set_seed
+from src.task2.util import index_to_class_map
 
 
 def get_augmentations() -> dict:
@@ -64,18 +63,6 @@ def get_augmentations() -> dict:
         "advanced": augmentation_2,
         "val": val_augmentation,
     }
-
-
-def get_model(num_classes, device):
-    """Load ResNet50 with pretrained weights and finetune all layers."""
-    model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
-
-    # Finetune all layers - replace the final classification layer
-    num_features = model.fc.in_features
-    model.fc = nn.Linear(num_features, num_classes)
-
-    model = model.to(device)
-    return model
 
 
 def calculate_metrics(outputs, targets):
@@ -284,58 +271,6 @@ def find_top_bottom_images(model, test_dataset, test_loader, index_to_class, dev
     return results, all_logits
 
 
-def visualize_top_bottom_images(results, test_dataset, index_to_class, output_dir, num_classes=3):
-    """Visualize top-5 and bottom-5 images for selected classes."""
-    classes_to_analyze = list(range(min(num_classes, len(index_to_class))))
-
-    for class_idx in classes_to_analyze:
-        class_name = index_to_class[class_idx]
-        if class_name not in results:
-            continue
-
-        top_5_idx = results[class_name]["top_5"]
-        bottom_5_idx = results[class_name]["bottom_5"]
-
-        fig, axes = plt.subplots(2, 5, figsize=(15, 6))
-        fig.suptitle(f"Top-5 (left) and Bottom-5 (right) Images for {class_name}", fontsize=14)
-
-        # Top-5 images
-        for i, idx in enumerate(top_5_idx):
-            sample = test_dataset[idx]
-            img = sample["image"].numpy().transpose(1, 2, 0)
-
-            # Denormalize for visualization
-            img = img * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406])
-            img = np.clip(img, 0, 1)
-
-            ax = axes[0, i]
-            ax.imshow(img)
-            score = results[class_name]["top_5_scores"][i]
-            ax.set_title(f"Top {i+1}\n({score:.3f})", fontsize=9)
-            ax.axis("off")
-
-        # Bottom-5 images
-        for i, idx in enumerate(bottom_5_idx):
-            sample = test_dataset[idx]
-            img = sample["image"].numpy().transpose(1, 2, 0)
-
-            # Denormalize for visualization
-            img = img * np.array([0.229, 0.224, 0.225]) + np.array([0.485, 0.456, 0.406])
-            img = np.clip(img, 0, 1)
-
-            ax = axes[1, i]
-            ax.imshow(img)
-            score = results[class_name]["bottom_5_scores"][i]
-            ax.set_title(f"Bottom {i+1}\n({score:.3f})", fontsize=9)
-            ax.axis("off")
-
-        plt.tight_layout()
-        plot_path = output_dir / f"top_bottom_images_{class_name}.png"
-        plt.savefig(plot_path, dpi=100, bbox_inches="tight")
-        plt.close()
-        print(f"Top/Bottom images saved to {plot_path}")
-
-
 def main(
     dataset_dir: Path,
     img_format: str,
@@ -346,6 +281,17 @@ def main(
     batch_size: int,
     seed: int,
 ):
+    """
+    Args:
+        dataset_dir: Directory containing dataset (sub directory of dat_dir)
+        img_format: Image file extension of dataset
+        class_index_file_name: Name of the file containing mapping between class_name and index
+        split_files: Names of split files containing train, test, val sets
+        learning_rate: Learning rate for training
+        epochs: Maximum epochs during training
+        batch_size: Batch size
+        seed: Seed for RNG
+    """
 
     print("=" * 60 + "\nTASK 2 - Training model\n" + "=" * 60 + "\n")
 
@@ -368,10 +314,11 @@ def main(
 
     # Load class mapping
     class_index_file = Path(dataset_dir / class_index_file_name).resolve()
+    assert class_index_file.is_file(), f"Class index file not found at {class_index_file}"
     index_to_class = index_to_class_map(class_index_file)
     num_classes = len(index_to_class)
-    print(f"Number of classes: {num_classes}")
     print(f"Classes: {index_to_class}\n")
+    print(f"Number of classes: {num_classes}")
 
     # Train models with different augmentations
     all_results = {}
@@ -380,14 +327,15 @@ def main(
     best_augmentation = None
 
     for augmentation_name in ["mild", "advanced"]:
-        print(f"\n{'='*60}")
+        print(f"\n{'='*30}")
         print(f"Training with {augmentation_name.upper()} augmentation")
-        print(f"{'='*60}\n")
+        print(f"{'='*30}\n")
 
         # Create dataloaders
         train_loader, val_loader, test_loader, test_dataset = dataloaders(
             dataset_dir=dataset_dir,
             split_files=split_files,
+            class_index_file_name=class_index_file_name,
             img_format=img_format,
             aug_dict=augmentation_dict,
             aug_name=augmentation_name,
@@ -400,7 +348,7 @@ def main(
 
         # Create and train model
         model = get_model(num_classes, device)
-        print("Model created: ResNet50\n")
+        print(f"Model: {model.__class__.__name__}\n")
 
         trained_model, history = train_model(
             model,
@@ -458,9 +406,9 @@ def main(
     print(f"Test logits saved to {logits_path}")
 
     # Find and visualize top-5 and bottom-5 images
-    print(f"\n{'='*60}")
+    print(f"\n{'='*30}")
     print("Finding top-5 and bottom-5 images for selected classes")
-    print(f"{'='*60}\n")
+    print(f"{'='*30}\n")
 
     results_ranking, _ = find_top_bottom_images(
         best_model, best_test_dataset, test_loader, index_to_class, device, num_classes=3
@@ -475,9 +423,9 @@ def main(
         json.dump(results_ranking, f, indent=4)
     print(f"\nRanking results saved to {ranking_json_path}")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'='*30}")
     print("SUMMARY")
-    print(f"{'='*60}")
+    print(f"{'='*30}")
     print(f"Best augmentation: {best_augmentation}")
     print(f"Best validation accuracy: {best_val_accuracy:.4f}")
     print(f"Model saved to: {best_model_path}")
