@@ -11,7 +11,6 @@ from PIL import Image
 from skimage.io import imread
 from torch.utils.data import Dataset
 from torchvision.transforms.functional import pil_to_tensor
-from src.task2.util import class_to_index_map
 
 
 class EuroSatDataset(Dataset):
@@ -22,6 +21,7 @@ class EuroSatDataset(Dataset):
         self,
         root_dir: str | Path,
         split_file: str | Path,
+        class_to_index_map: dict[str, int],
         class_index_file: str | Path,
         img_format=str,
         transform=None,
@@ -29,7 +29,7 @@ class EuroSatDataset(Dataset):
         self.root_dir = Path(root_dir).resolve()
         self.transform = transform
         self.split_file = Path(self.root_dir / split_file).resolve()
-        self.class_to_index = class_to_index_map(Path(self.root_dir / class_index_file).resolve())
+        self.class_to_index_map = class_to_index_map
         self.samples = self.read_imgs_from_split_file()
         self.img_format = img_format
         assert self.img_format in [
@@ -62,7 +62,7 @@ class EuroSatDataset(Dataset):
         df = pd.read_csv(self.split_file)
         # Convert relative paths to absolute paths using pathlib
         df["file"] = df["file"].apply(lambda f: self.root_dir / f)
-        df["label"] = df["label"].apply(lambda c: self.class_to_index[c])
+        df["label"] = df["label"].apply(lambda c: self.class_to_index_map[c])
 
         result = df.to_dict("records")
         return result
