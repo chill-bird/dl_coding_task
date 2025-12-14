@@ -17,7 +17,7 @@ from src.constants import (
 )
 from src.util.paths import parse_dat_dir, root_path
 from src.task1.split_data import split_data
-from src.task2.task2 import main as train
+from src.task2.fine_tune import fine_tune
 
 DATASET = "euro_sat_ms"
 # DATASET = "euro_sat_rgb"
@@ -29,10 +29,17 @@ def main():
     parser = argparse.ArgumentParser(description="DL for Master Students Coding task")
     parser.add_argument(
         "--dat_dir",
-        "-d",
+        "-D",
         type=str,
         default=None,
         help="Path to data directory containing zip files",
+    )
+    parser.add_argument(
+        "--root_dir",
+        "-R",
+        type=str,
+        default=None,
+        help="Path to root directory of the project code",
     )
     args = parser.parse_args()
 
@@ -50,7 +57,7 @@ def main():
     split_data(dat_dir, DATASET, seed=SEED)
 
     # Task 2
-    # train(
+    # fine_tune(
     #     dataset_dir=dataset_dir,
     #     img_format=img_format,
     #     class_index_file_name=CLASS_INDEX_FILE,

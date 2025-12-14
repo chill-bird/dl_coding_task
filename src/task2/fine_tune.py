@@ -21,23 +21,18 @@ from src.task2.model import get_model
 from src.util.paths import results_parent_dir
 from src.task2.plot import plot_training_history, visualize_top_bottom_images
 from src.util.seed import set_seed
-from src.task2.util import index_to_class_map
+from src.task2.util import class_to_index_map, index_to_class_map, find_top_bottom_images
 
 
-def get_augmentations() -> dict:
-    """Define two different data augmentation settings."""
-
-    # Augmentation 1: 1 augmentation (only random horizontal flip + normalization)
-    augmentation_1 = transforms.Compose(
+AUGMENTATIONS = {
+    "mild": transforms.Compose(
         [
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
-    )
-
-    # Augmentation 2: 2 augmentation with multiple transformations
-    augmentation_2 = transforms.Compose(
+    ),
+    "advanced": transforms.Compose(
         [
             transforms.RandomHorizontalFlip(p=0.5),
             transforms.RandomVerticalFlip(p=0.3),
@@ -48,24 +43,17 @@ def get_augmentations() -> dict:
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
-    )
-
-    # Validation/Test augmentation (only normalization)
-    val_augmentation = transforms.Compose(
+    ),
+    "val": transforms.Compose(
         [
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
         ]
-    )
-
-    return {
-        "mild": augmentation_1,
-        "advanced": augmentation_2,
-        "val": val_augmentation,
-    }
+    ),
+}
 
 
-def calculate_metrics(outputs, targets):
+def calculate_metrics(outputs: torch.Tensor, targets: torch.Tensor) -> tuple[float, list[float]]:
     """Calculate accuracy and per-class TPR (True Positive Rate)."""
     _, predicted = torch.max(outputs, 1)
 
@@ -85,7 +73,13 @@ def calculate_metrics(outputs, targets):
     return accuracy, tpr_per_class
 
 
-def train_epoch(model, train_loader, criterion, optimizer, device):
+def train_epoch(
+    model: nn.Module,
+    train_loader,
+    criterion: nn.Module,
+    optimizer: optim.Optimizer,
+    device: torch.device,
+) -> tuple[float, float, list[float]]:
     """Train for one epoch."""
     model.train()
     total_loss = 0.0
@@ -96,13 +90,13 @@ def train_epoch(model, train_loader, criterion, optimizer, device):
         images = batch["image"].to(device)
         labels = batch["label"].to(device)
 
-        optimizer.zero_grad()
+        optimizer.zero_grad()  # Prevent accumulating gradients of previous batches
         outputs = model(images)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
 
-        total_loss += loss.item()
+        total_loss += loss.item()  # Sum over losses of each item in a batch
         all_outputs.append(outputs.detach().cpu())
         all_targets.append(labels.detach().cpu())
 
@@ -113,7 +107,9 @@ def train_epoch(model, train_loader, criterion, optimizer, device):
     return total_loss / len(train_loader), accuracy, tpr_per_class
 
 
-def validate(model, val_loader, criterion, device):
+def validate(
+    model: nn.Module, val_loader, criterion: nn.Module, device: torch.device
+) -> tuple[float, float, list[float]]:
     """Validate the model."""
     model.eval()
     total_loss = 0.0
@@ -139,13 +135,20 @@ def validate(model, val_loader, criterion, device):
     return total_loss / len(val_loader), accuracy, tpr_per_class
 
 
-def train_model(model, train_loader, val_loader, num_epochs, device, learning_rate=0.001):
+def train_model(
+    model: nn.Module,
+    train_loader,
+    val_loader,
+    num_epochs: int,
+    device: torch.device,
+    learning_rate: float,
+) -> tuple[nn.Module, dict[str, list]]:
     """Train model with early stopping based on validation accuracy."""
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss()  # for multi-class
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="max", factor=0.5, patience=3, verbose=True
-    )
+    )  # TODO: Check if necessary
 
     history = {
         "train_loss": [],
@@ -200,7 +203,9 @@ def train_model(model, train_loader, val_loader, num_epochs, device, learning_ra
     return model, history
 
 
-def test_model(model, test_loader, device):
+def test_model(
+    model: nn.Module, test_loader, device: torch.device
+) -> tuple[float, list[float], torch.Tensor, torch.Tensor]:
     """Evaluate model on test set."""
     model.eval()
     all_outputs = []
@@ -222,56 +227,26 @@ def test_model(model, test_loader, device):
     return accuracy, tpr_per_class, all_outputs, all_targets
 
 
-def find_top_bottom_images(model, test_dataset, test_loader, index_to_class, device, num_classes=3):
-    """Find top-5 and bottom-5 scoring images for each class."""
-    model.eval()
+def ranking_check(best_model, best_test_dataset, test_loader, index_to_class, device, output_dir):
+    """Ranking check for 3 classes."""
 
-    # Store logits, predictions, and indices for all test samples
-    all_logits = []
-    all_true_labels = []
+    num_classes = 3
 
-    with torch.no_grad():
-        idx = 0
-        for batch in test_loader:
-            images = batch["image"].to(device)
-            logits = model(images)
-            all_logits.append(logits.detach().cpu())
-            all_true_labels.append(batch["label"])
-            idx += len(batch["image"])
+    results_ranking, _ = find_top_bottom_images(
+        best_model, best_test_dataset, test_loader, index_to_class, device, num_classes
+    )
+    visualize_top_bottom_images(
+        results_ranking, best_test_dataset, index_to_class, output_dir, num_classes
+    )
 
-    all_logits = torch.cat(all_logits)
-    all_true_labels = torch.cat(all_true_labels)
-
-    # For each class, find top-5 and bottom-5 predictions
-    results = {}
-
-    # Select classes to visualize (first 3 classes)
-    classes_to_analyze = list(range(min(num_classes, len(index_to_class))))
-
-    for class_idx in classes_to_analyze:
-        class_name = index_to_class[class_idx]
-
-        # Get scores for this class from logits
-        class_scores = all_logits[:, class_idx]
-
-        # Get indices sorted by score
-        sorted_indices = torch.argsort(class_scores, descending=True)
-
-        # Top-5 and bottom-5 indices
-        top_5_indices = sorted_indices[:5].numpy()
-        bottom_5_indices = sorted_indices[-5:].numpy()
-
-        results[class_name] = {
-            "top_5": top_5_indices.tolist(),
-            "bottom_5": bottom_5_indices.tolist(),
-            "top_5_scores": class_scores[top_5_indices].numpy().tolist(),
-            "bottom_5_scores": class_scores[bottom_5_indices].numpy().tolist(),
-        }
-
-    return results, all_logits
+    # Save ranking results
+    ranking_json_path = output_dir / "top_bottom_images.json"
+    with open(ranking_json_path, "w") as f:
+        json.dump(results_ranking, f, indent=4)
+    print(f"\nRanking results saved to {ranking_json_path}")
 
 
-def main(
+def fine_tune(
     dataset_dir: Path,
     img_format: str,
     class_index_file_name: str,
@@ -280,7 +255,7 @@ def main(
     epochs: int,
     batch_size: int,
     seed: int,
-):
+) -> Path:
     """
     Args:
         dataset_dir: Directory containing dataset (sub directory of dat_dir)
@@ -309,13 +284,11 @@ def main(
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}\n")
 
-    # Get augmentations
-    augmentation_dict = get_augmentations()
-
     # Load class mapping
     class_index_file = Path(dataset_dir / class_index_file_name).resolve()
     assert class_index_file.is_file(), f"Class index file not found at {class_index_file}"
     index_to_class = index_to_class_map(class_index_file)
+    class_to_index = class_to_index_map(class_index_file)
     num_classes = len(index_to_class)
     print(f"Classes: {index_to_class}\n")
     print(f"Number of classes: {num_classes}")
@@ -335,9 +308,9 @@ def main(
         train_loader, val_loader, test_loader, test_dataset = dataloaders(
             dataset_dir=dataset_dir,
             split_files=split_files,
-            class_index_file_name=class_index_file_name,
+            class_to_index_map=class_to_index,
             img_format=img_format,
-            aug_dict=augmentation_dict,
+            aug_dict=AUGMENTATIONS,
             aug_name=augmentation_name,
             batch_size=batch_size,
         )
@@ -410,18 +383,8 @@ def main(
     print("Finding top-5 and bottom-5 images for selected classes")
     print(f"{'='*30}\n")
 
-    results_ranking, _ = find_top_bottom_images(
-        best_model, best_test_dataset, test_loader, index_to_class, device, num_classes=3
-    )
-    visualize_top_bottom_images(
-        results_ranking, best_test_dataset, index_to_class, output_dir, num_classes=3
-    )
-
-    # Save ranking results
-    ranking_json_path = output_dir / "top_bottom_images.json"
-    with open(ranking_json_path, "w") as f:
-        json.dump(results_ranking, f, indent=4)
-    print(f"\nRanking results saved to {ranking_json_path}")
+    # Ranking check
+    ranking_check(best_model, best_test_dataset, test_loader, index_to_class, device, output_dir)
 
     print(f"\n{'='*30}")
     print("SUMMARY")
@@ -430,5 +393,7 @@ def main(
     print(f"Best validation accuracy: {best_val_accuracy:.4f}")
     print(f"Model saved to: {best_model_path}")
     print(f"Results directory: {output_dir}")
+
+    print("\n[✓] TASK 2")
 
     return output_dir

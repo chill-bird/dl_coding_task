@@ -4,6 +4,7 @@
 
 - [ ] Check lecture requirements for seed
 - [ ] Check torch installation on cluster
+- [ ] Check normalization of images (currently using ImageNet mean & std)
 
 ## Task 1
 

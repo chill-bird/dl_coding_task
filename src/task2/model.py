@@ -10,11 +10,10 @@ import torchvision.models as models
 
 
 def get_model(num_classes, device):
-    """Load ResNet50 with pretrained weights and finetune all layers."""
+    """Load ResNet50 with pretrained weights and finetune by replacing last layer."""
     model = models.resnet50(weights=models.ResNet50_Weights.IMAGENET1K_V1)
 
-    # Finetune all layers - replace the final classification layer
-    # TODO All layers? Or only last layer??
+    # Finetune by replacing final classification layer
     num_features = model.fc.in_features
     model.fc = nn.Linear(num_features, num_classes)
 
