@@ -5,6 +5,7 @@ paths.py
 Provides utility functions for locating paths in the project.
 """
 
+from src.constants import OUTPUT_DIR_NAME
 from pathlib import Path
 
 
@@ -32,7 +33,7 @@ def results_parent_dir() -> Path:
     Returns path to results parent directory.
     Files for each run are saved in subdirectories.
     """
-    path = Path(root_path() / "results").resolve()
+    path = Path(root_path() / OUTPUT_DIR_NAME).resolve()
     return path
 
 

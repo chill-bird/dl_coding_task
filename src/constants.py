@@ -39,6 +39,10 @@ DATASETS = {
 DATASET_DIR_NAME = DATASETS[DATASET]["unzip_dirname"]
 IMG_FORMAT = DATASETS[DATASET]["format"]
 
+OUTPUT_DIR_NAME = "results"
+BEST_MODEL_FILENAME = "test_logits_best_model.npy"
+PREDICTIONS_DIR_NAME = "predictions"
+
 TEST_FILE = "testfile.csv"
 TRAIN_FILE = "trainfile.csv"
 VAL_FILE = "valfile.csv"

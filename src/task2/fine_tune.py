@@ -6,6 +6,8 @@ and use a manual seed so that you and us can reproduce the same split your exper
 Use at least 2500 images for training, 1000 for validation and 2000 for testing.
 """
 
+# TODO: Path for best model overwrites last best model (is copied twice)
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -23,13 +25,15 @@ from src.constants import (
     EPOCHS,
     IMG_FORMAT,
     LEARNING_RATE,
+    OUTPUT_DIR_NAME,
     SEED,
     SPLIT_FILES,
 )
-from src.task2.data_loader import dataloaders
+from src.task2._data_loader import dataloaders
 from src.task2.model import get_model
-from src.task2.plot import plot_training_history, visualize_top_bottom_images
-from src.task2.util import class_to_index_map, index_to_class_map, find_top_bottom_images
+from src.task2._plot import plot_training_history
+from src.task2.util import class_to_index_map, index_to_class_map
+from src.task2._ranking_check import ranking_check
 from src.util.paths import results_parent_dir, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
@@ -238,25 +242,6 @@ def test_model(
     return accuracy, tpr_per_class, all_outputs, all_targets
 
 
-def ranking_check(best_model, best_test_dataset, test_loader, index_to_class, device, output_dir):
-    """Ranking check for 3 classes."""
-
-    num_classes = 3
-
-    results_ranking, _ = find_top_bottom_images(
-        best_model, best_test_dataset, test_loader, index_to_class, device, num_classes
-    )
-    visualize_top_bottom_images(
-        results_ranking, best_test_dataset, index_to_class, output_dir, num_classes
-    )
-
-    # Save ranking results
-    ranking_json_path = output_dir / "top_bottom_images.json"
-    with open(ranking_json_path, "w") as f:
-        json.dump(results_ranking, f, indent=4)
-    print(f"\nRanking results saved to {ranking_json_path}")
-
-
 def fine_tune(
     dataset_dir: Path,
     img_format: str,
@@ -290,9 +275,9 @@ def fine_tune(
 
     # Create output directory
     output_dir = Path(
-        results_parent_dir() / "results" / f"{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        results_parent_dir() / f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     ).resolve()
-    output_dir.mkdir(parents=True, exist_ok=True)  # Raise error if already exists
+    output_dir.mkdir(parents=False, exist_ok=False)  # Raise error if already exists
     print(f"\nOutput directory: {output_dir}\n")
 
     # Setup device
