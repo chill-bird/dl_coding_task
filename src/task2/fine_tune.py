@@ -16,12 +16,23 @@ from tqdm import tqdm
 import json
 from datetime import datetime
 
+from src.constants import (
+    BATCH_SIZE,
+    CLASS_INDEX_FILE,
+    DATASET_DIR_NAME,
+    EPOCHS,
+    IMG_FORMAT,
+    LEARNING_RATE,
+    SEED,
+    SPLIT_FILES,
+)
 from src.task2.data_loader import dataloaders
 from src.task2.model import get_model
-from src.util.paths import results_parent_dir
 from src.task2.plot import plot_training_history, visualize_top_bottom_images
-from src.util.seed import set_seed
 from src.task2.util import class_to_index_map, index_to_class_map, find_top_bottom_images
+from src.util.paths import results_parent_dir, root_path
+from src.util.run_config import get_dat_dir_args
+from src.util.seed import set_seed
 
 
 AUGMENTATIONS = {
@@ -255,7 +266,7 @@ def fine_tune(
     epochs: int,
     batch_size: int,
     seed: int,
-) -> Path:
+) -> tuple[Path, Path]:
     """
     Args:
         dataset_dir: Directory containing dataset (sub directory of dat_dir)
@@ -266,6 +277,10 @@ def fine_tune(
         epochs: Maximum epochs during training
         batch_size: Batch size
         seed: Seed for RNG
+
+    Returns tuple of
+        - Path to best model
+        - Path to rest of output files
     """
 
     print("=" * 60 + "\nTASK 2 - Training model\n" + "=" * 60 + "\n")
@@ -396,4 +411,30 @@ def fine_tune(
 
     print("\n[✓] TASK 2")
 
-    return output_dir
+    return best_model_path, output_dir
+
+
+def run():
+    """Runs fine tuning script."""
+
+    # Dataset parent directory (dat_dir) containing zip files
+    dat_dir = get_dat_dir_args()
+    dataset_dir = dat_dir / DATASET_DIR_NAME
+
+    print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}\nIMG_EXT:  {IMG_FORMAT}\n")
+
+    # Run Task 2: Fine-tune model
+    fine_tune(
+        dataset_dir=dataset_dir,
+        img_format=IMG_FORMAT,
+        class_index_file_name=CLASS_INDEX_FILE,
+        split_files=SPLIT_FILES,
+        learning_rate=LEARNING_RATE,
+        epochs=EPOCHS,
+        batch_size=BATCH_SIZE,
+        seed=SEED,
+    )
+
+
+if __name__ == "__main__":
+    run()

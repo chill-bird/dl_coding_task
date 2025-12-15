@@ -5,6 +5,14 @@ constants.py
 Provides constants for project.
 """
 
+### Change for each run ###
+
+# DATASET = "euro_sat_ms"
+DATASET = "euro_sat_rgb"
+
+
+### Fixed constants ###
+
 SEED = 3780947
 
 DATASETS = {
@@ -27,6 +35,9 @@ DATASETS = {
         "format": ".jpg",
     },
 }
+
+DATASET_DIR_NAME = DATASETS[DATASET]["unzip_dirname"]
+IMG_FORMAT = DATASETS[DATASET]["format"]
 
 TEST_FILE = "testfile.csv"
 TRAIN_FILE = "trainfile.csv"

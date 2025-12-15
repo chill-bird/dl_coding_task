@@ -9,8 +9,9 @@ images for training, 1000 for validation and 2000 for testing.
 from pathlib import Path
 import numpy as np
 from sklearn.model_selection import train_test_split
-from src.constants import DATASETS
-from src.util.paths import dataset_path
+from src.constants import DATASET, DATASETS, IMG_FORMAT, SEED
+from src.util.paths import dataset_path, root_path
+from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
 from src.task1.util import (
     print_split_stats,
@@ -160,3 +161,19 @@ def split_data(dat_dir: Path, dataset_name: str, seed: int):
     verify_disjoint(train_imgs, val_imgs, test_imgs)
 
     print("\n[✓] TASK 1")
+
+
+def run():
+    """Runs data splitting."""
+
+    # Dataset parent directory (dat_dir) containing zip files
+    dat_dir = get_dat_dir_args()
+
+    print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}\nIMG_EXT:  {IMG_FORMAT}\n")
+
+    # Run Task 1
+    split_data(dat_dir, DATASET, seed=SEED)
+
+
+if __name__ == "__main__":
+    run()
