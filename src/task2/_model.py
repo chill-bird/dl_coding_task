@@ -30,7 +30,7 @@ def load_model_from_checkpoint(model_path, num_classes, device):
     model.fc = nn.Linear(num_features, num_classes)
 
     # Load checkpoint
-    state_dict = torch.load(model_path, map_location=device)
+    state_dict = torch.load(model_path, map_location=device, weights_only=False)
     model.load_state_dict(state_dict)
     model = model.to(device)
     model.eval()

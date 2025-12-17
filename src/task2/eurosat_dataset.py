@@ -22,7 +22,6 @@ class EuroSatDataset(Dataset):
         root_dir: str | Path,
         split_file: str | Path,
         class_to_index_map: dict[str, int],
-        class_index_file: str | Path,
         img_format=str,
         transform=None,
     ):

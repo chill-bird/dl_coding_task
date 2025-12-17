@@ -30,7 +30,7 @@ from src.constants import (
     SPLIT_FILES,
 )
 from src.task2._data_loader import dataloaders
-from src.task2.model import get_model
+from src.task2._model import get_model
 from src.task2._plot import plot_training_history
 from src.task2.util import class_to_index_map, index_to_class_map
 from src.task2._ranking_check import ranking_check
@@ -162,7 +162,7 @@ def train_model(
     criterion = nn.CrossEntropyLoss()  # for multi-class
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode="max", factor=0.5, patience=3, verbose=True
+        optimizer, mode="max", factor=0.5, patience=3
     )  # TODO: Check if necessary
 
     history = {
@@ -277,7 +277,7 @@ def fine_tune(
     output_dir = Path(
         results_parent_dir() / f"run_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     ).resolve()
-    output_dir.mkdir(parents=False, exist_ok=False)  # Raise error if already exists
+    output_dir.mkdir(parents=True, exist_ok=False)  # Raise error if already exists
     print(f"\nOutput directory: {output_dir}\n")
 
     # Setup device
