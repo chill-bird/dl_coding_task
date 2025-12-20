@@ -5,11 +5,12 @@ _ranking_check.py
 Performs ranking check for top- and bottom scoring images for three classes.
 """
 
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader, Dataset
 import json
 import matplotlib.pyplot as plt
 import numpy as np
-import torch
-import torch.nn as nn
 
 
 NUM_CLASSES = 3
@@ -17,8 +18,8 @@ NUM_CLASSES = 3
 
 def find_top_bottom_images(
     model: nn.Module,
-    test_dataset,
-    test_loader,
+    test_dataset: Dataset,
+    test_loader: DataLoader,
     index_to_class: dict[int, str],
     device: torch.device,
     num_classes: int = NUM_CLASSES,
@@ -103,7 +104,8 @@ def visualize_top_bottom_images(
             ax = axes[0, i]
             ax.imshow(img)
             score = results[class_name]["top_5_scores"][i]
-            ax.set_title(f"Top {i+1}\n({score:.3f})", fontsize=9)
+            filename = test_dataset.samples[idx]["file"].name
+            ax.set_title(f"{filename}\n({score:.3f})", fontsize=8)
             ax.axis("off")
 
         # Bottom-5 images
@@ -118,7 +120,8 @@ def visualize_top_bottom_images(
             ax = axes[1, i]
             ax.imshow(img)
             score = results[class_name]["bottom_5_scores"][i]
-            ax.set_title(f"Bottom {i+1}\n({score:.3f})", fontsize=9)
+            filename = test_dataset.samples[idx]["file"].name
+            ax.set_title(f"{filename}\n({score:.3f})", fontsize=8)
             ax.axis("off")
 
         plt.tight_layout()
@@ -128,14 +131,14 @@ def visualize_top_bottom_images(
         print(f"Top/Bottom images saved to {plot_path}")
 
 
-def ranking_check(best_model, best_test_dataset, test_loader, index_to_class, device, output_dir):
+def ranking_check(model, test_dataset, test_loader, index_to_class, device, output_dir):
     """Ranking check for 3 classes."""
 
     results_ranking, _ = find_top_bottom_images(
-        best_model, best_test_dataset, test_loader, index_to_class, device, NUM_CLASSES
+        model, test_dataset, test_loader, index_to_class, device, NUM_CLASSES
     )
     visualize_top_bottom_images(
-        results_ranking, best_test_dataset, index_to_class, output_dir, NUM_CLASSES
+        results_ranking, test_dataset, index_to_class, output_dir, NUM_CLASSES
     )
 
     # Save ranking results

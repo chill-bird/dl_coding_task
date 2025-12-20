@@ -1,12 +1,8 @@
 """
 Task 2 - Classification with RGB channels
 
-Perform a train-val-test split of the data which depends on a seed parameter,
-and use a manual seed so that you and us can reproduce the same split your experiments.
-Use at least 2500 images for training, 1000 for validation and 2000 for testing.
+Fine-tunes image model to classify data from eurosat_dataset.
 """
-
-# TODO: Path for best model overwrites last best model (is copied twice)
 
 import torch
 import torch.nn as nn
@@ -20,20 +16,20 @@ from datetime import datetime
 
 from src.constants import (
     BATCH_SIZE,
+    BEST_MODEL_FILENAME,
     CLASS_INDEX_FILE,
     DATASET_DIR_NAME,
     EPOCHS,
     IMG_FORMAT,
     LEARNING_RATE,
-    OUTPUT_DIR_NAME,
     SEED,
     SPLIT_FILES,
+    LOGITS_TEST_SET_FILE,
 )
 from src.task2._data_loader import dataloaders
 from src.task2._model import get_model
 from src.task2._plot import plot_training_history
 from src.task2.util import class_to_index_map, index_to_class_map
-from src.task2._ranking_check import ranking_check
 from src.util.paths import results_parent_dir, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
@@ -299,6 +295,7 @@ def fine_tune(
     best_val_accuracy = 0.0
     best_augmentation = None
 
+    # TODO: Save overall best model to make predictions
     for augmentation_name in ["mild", "advanced"]:
         print(f"\n{'='*30}")
         print(f"Training with {augmentation_name.upper()} augmentation")
@@ -319,7 +316,7 @@ def fine_tune(
         print(f"Val set size: {len(val_loader.dataset)}")
         print(f"Test set size: {len(test_loader.dataset)}\n")
 
-        # Create and train model
+        # Create and train model based on validation accuracy
         model = get_model(num_classes, device)
         print(f"Model: {model.__class__.__name__}\n")
 
@@ -335,7 +332,7 @@ def fine_tune(
         # Plot training history
         plot_training_history(history, index_to_class, augmentation_name, output_dir)
 
-        # Test on test set
+        # Test on test set (hold-out set)
         test_accuracy, test_tpr, test_logits, test_targets = test_model(
             trained_model, test_loader, device
         )
@@ -367,14 +364,18 @@ def fine_tune(
             best_test_dataset = test_dataset
             print(f"\n✓ New best model saved: {best_model_path}\n")
 
+    # Save overall best model once again for follow-up scripts
+    overall_best_model_path = output_dir / BEST_MODEL_FILENAME
+    torch.save(best_model.state_dict(), overall_best_model_path)
+
     # Save all results to JSON
     results_json_path = output_dir / "training_results.json"
     with open(results_json_path, "w") as f:
         json.dump(all_results, f, indent=4)
     print(f"\nResults saved to {results_json_path}")
 
-    # Save test logits for best model
-    logits_path = output_dir / "test_logits_best_model.npy"
+    # Save test logits for best model (Task 2.2)
+    logits_path = output_dir / LOGITS_TEST_SET_FILE
     np.save(logits_path, best_logits.numpy())
     print(f"Test logits saved to {logits_path}")
 
@@ -382,9 +383,6 @@ def fine_tune(
     print(f"\n{'='*30}")
     print("Finding top-5 and bottom-5 images for selected classes")
     print(f"{'='*30}\n")
-
-    # Ranking check
-    ranking_check(best_model, best_test_dataset, test_loader, index_to_class, device, output_dir)
 
     print(f"\n{'='*30}")
     print("SUMMARY")
@@ -394,7 +392,7 @@ def fine_tune(
     print(f"Model saved to: {best_model_path}")
     print(f"Results directory: {output_dir}")
 
-    print("\n[✓] TASK 2")
+    print("\n[✓] TASK 2 - Fine-tuning completed")
 
     return best_model_path, output_dir
 

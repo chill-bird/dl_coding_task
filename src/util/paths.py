@@ -63,3 +63,11 @@ def check_if_datasets_exist(dat_dir: Path):
     assert (
         eurosat_rgb_file_location.is_file()
     ), f"Euro Sat RGB data set does not exist at {eurosat_rgb_file_location}"
+
+
+def find_most_recent_train_results_dir() -> Path:
+    """Returns path to output directory of most recent run"""
+
+    results_parent_path = results_parent_dir()
+    target_dir = sorted(results_parent_path.iterdir(), reverse=True)[0]
+    return target_dir.resolve()

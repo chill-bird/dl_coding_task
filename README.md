@@ -36,13 +36,7 @@ Fine-tune model
 python -m src.task2.fine_tune -d <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
 
-### Compute final model's predictions on the test data
-
-```sh
-python -m src.task2.predict -d <ABSOLUTE_PATH_TO_DAT_DIR_>
-```
-
-### Reproduction script
+### Test saved model for reproducibility and perform visual ranking check
 
 ```sh
 python -m src.task2.reproduce -d <ABSOLUTE_PATH_TO_DAT_DIR_>
