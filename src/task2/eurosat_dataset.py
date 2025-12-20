@@ -16,7 +16,6 @@ from torchvision.transforms.functional import pil_to_tensor
 class EuroSatDataset(Dataset):
     """Represents Dataset class for EuroSAT images"""
 
-    # TODO
     def __init__(
         self,
         root_dir: str | Path,
@@ -65,8 +64,3 @@ class EuroSatDataset(Dataset):
 
         result = df.to_dict("records")
         return result
-
-    def transform(self, img: Image):
-        """Transforms image"""
-
-        return pil_to_tensor(img)
