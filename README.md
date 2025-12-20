@@ -11,12 +11,33 @@
 - Install requirements `pip install -r requirements.txt`
 - Download zipped data files (`EuroSAT_MS.zip` and `EuroSAT_RGB.zip`) to a `dat` directory of your choice. This `dat` directory must be provided as argument when running the script (see below).
 
-## Run locally
+## Run
+
+For each task, activate your virtual environment, first, and set active working directory to project root.
 
 - Activate virtual environment `source .venv/bin/activate`
 - Set working directory to project root
-- Run project: `python -m src.main -d <ABSOLUTE_PATH_TO_DAT_DIR_>`
 
-## Run on cluster
+### Task 1
 
-- TODO
+Unzip raw files and split data into train, test, val set:
+
+```sh
+python -m src.task1.split_data -d <ABSOLUTE_PATH_TO_DAT_DIR_>
+```
+
+## Task 2
+
+### Fine tune model
+
+Fine-tune model
+
+```sh
+python -m src.task2.fine_tune -d <ABSOLUTE_PATH_TO_DAT_DIR_>
+```
+
+### Test saved model for reproducibility and perform visual ranking check
+
+```sh
+python -m src.task2.reproduce -d <ABSOLUTE_PATH_TO_DAT_DIR_>
+```

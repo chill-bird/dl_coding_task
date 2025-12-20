@@ -5,6 +5,7 @@ paths.py
 Provides utility functions for locating paths in the project.
 """
 
+from src.constants import OUTPUT_DIR_NAME
 from pathlib import Path
 
 
@@ -32,7 +33,7 @@ def results_parent_dir() -> Path:
     Returns path to results parent directory.
     Files for each run are saved in subdirectories.
     """
-    path = Path(root_path() / "results").resolve()
+    path = Path(root_path() / OUTPUT_DIR_NAME).resolve()
     return path
 
 
@@ -62,3 +63,11 @@ def check_if_datasets_exist(dat_dir: Path):
     assert (
         eurosat_rgb_file_location.is_file()
     ), f"Euro Sat RGB data set does not exist at {eurosat_rgb_file_location}"
+
+
+def find_most_recent_train_results_dir() -> Path:
+    """Returns path to output directory of most recent run"""
+
+    results_parent_path = results_parent_dir()
+    target_dir = sorted(results_parent_path.iterdir(), reverse=True)[0]
+    return target_dir.resolve()

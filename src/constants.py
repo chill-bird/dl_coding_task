@@ -5,6 +5,14 @@ constants.py
 Provides constants for project.
 """
 
+### Change for each run ###
+
+# DATASET = "euro_sat_ms"
+DATASET = "euro_sat_rgb"
+
+
+### Fixed constants ###
+
 SEED = 3780947
 
 DATASETS = {
@@ -28,12 +36,22 @@ DATASETS = {
     },
 }
 
+DATASET_DIR_NAME = DATASETS[DATASET]["unzip_dirname"]
+IMG_FORMAT = DATASETS[DATASET]["format"]
+
+OUTPUT_DIR_NAME = "results"
+BEST_MODEL_FILENAME = "best_model.pt"
+REPRODUCE_OUTPUT_DIR_NAME = "test"
+LOGITS_TEST_SET_FILE = "test_logits_best_model.npy"
+REPRODUCED_LOGITS_TEST_SET_FILE = "reproduced_test_logits_best_model.npy"
+
 TEST_FILE = "testfile.csv"
 TRAIN_FILE = "trainfile.csv"
 VAL_FILE = "valfile.csv"
 CLASS_INDEX_FILE = "class_index.csv"
 SPLIT_FILES = {"test": TEST_FILE, "train": TRAIN_FILE, "val": VAL_FILE}
 
+# TODO Adjust params for cluster training
 LEARNING_RATE = 0.001
 EPOCHS = 50
 BATCH_SIZE = 32

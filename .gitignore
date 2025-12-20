@@ -4,6 +4,7 @@
 dat/**.zip
 dat/**.csv
 dat/**/
+results
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
