@@ -17,7 +17,6 @@ from datetime import datetime
 from src.constants import (
     BATCH_SIZE,
     BEST_MODEL_FILENAME,
-    CLASS_INDEX_FILE,
     DATASET_DIR_NAME,
     EPOCHS,
     IMG_FORMAT,
@@ -29,7 +28,7 @@ from src.constants import (
 from src.task2._data_loader import dataloaders
 from src.task2._model import get_model
 from src.task2._plot import plot_training_history
-from src.task2.util import class_to_index_map, index_to_class_map
+from src.task2._classname_index_mapping import index_to_class_map
 from src.util.paths import results_parent_dir, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
@@ -241,7 +240,6 @@ def test_model(
 def fine_tune(
     dataset_dir: Path,
     img_format: str,
-    class_index_file_name: str,
     split_files: list[str],
     learning_rate: float,
     epochs: int,
@@ -252,7 +250,6 @@ def fine_tune(
     Args:
         dataset_dir: Directory containing dataset (sub directory of dat_dir)
         img_format: Image file extension of dataset
-        class_index_file_name: Name of the file containing mapping between class_name and index
         split_files: Names of split files containing train, test, val sets
         learning_rate: Learning rate for training
         epochs: Maximum epochs during training
@@ -281,10 +278,7 @@ def fine_tune(
     print(f"Using device: {device}\n")
 
     # Load class mapping
-    class_index_file = Path(dataset_dir / class_index_file_name).resolve()
-    assert class_index_file.is_file(), f"Class index file not found at {class_index_file}"
-    index_to_class = index_to_class_map(class_index_file)
-    class_to_index = class_to_index_map(class_index_file)
+    index_to_class = index_to_class_map(dataset_dir)
     num_classes = len(index_to_class)
     print(f"Classes: {index_to_class}\n")
     print(f"Number of classes: {num_classes}")
@@ -305,7 +299,6 @@ def fine_tune(
         train_loader, val_loader, test_loader, test_dataset = dataloaders(
             dataset_dir=dataset_dir,
             split_files=split_files,
-            class_to_index_map=class_to_index,
             img_format=img_format,
             aug_dict=AUGMENTATIONS,
             aug_name=augmentation_name,
@@ -361,7 +354,6 @@ def fine_tune(
             torch.save(trained_model.state_dict(), best_model_path)
             best_logits = test_logits
             best_model = trained_model
-            best_test_dataset = test_dataset
             print(f"\n✓ New best model saved: {best_model_path}\n")
 
     # Save overall best model once again for follow-up scripts
@@ -404,13 +396,12 @@ def run():
     dat_dir = get_dat_dir_args()
     dataset_dir = dat_dir / DATASET_DIR_NAME
 
-    print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}\nIMG_EXT:  {IMG_FORMAT}\n")
+    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {IMG_FORMAT}\n")
 
     # Run Task 2: Fine-tune model
     fine_tune(
         dataset_dir=dataset_dir,
         img_format=IMG_FORMAT,
-        class_index_file_name=CLASS_INDEX_FILE,
         split_files=SPLIT_FILES,
         learning_rate=LEARNING_RATE,
         epochs=EPOCHS,

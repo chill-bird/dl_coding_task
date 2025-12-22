@@ -10,7 +10,7 @@
 ### Nice-to-have
 
 - [ ] Download script? → is pw protected, so not that worth it
-- [ ] Outsource class mapping
+- [x] Outsource class mapping
 
 ## Task 1
 

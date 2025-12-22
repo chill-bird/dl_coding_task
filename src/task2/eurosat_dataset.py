@@ -10,7 +10,7 @@ from pathlib import Path
 from PIL import Image
 from skimage.io import imread
 from torch.utils.data import Dataset
-from torchvision.transforms.functional import pil_to_tensor
+from src.task2._classname_index_mapping import class_to_index_map
 
 
 class EuroSatDataset(Dataset):
@@ -20,14 +20,13 @@ class EuroSatDataset(Dataset):
         self,
         root_dir: str | Path,
         split_file: str | Path,
-        class_to_index_map: dict[str, int],
         img_format=str,
         transform=None,
     ):
         self.root_dir = Path(root_dir).resolve()
         self.transform = transform
         self.split_file = Path(self.root_dir / split_file).resolve()
-        self.class_to_index_map = class_to_index_map
+        self.class_to_index_map = class_to_index_map(self.root_dir)
         self.samples = self.read_imgs_from_split_file()
         self.img_format = img_format
         assert self.img_format in [
