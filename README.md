@@ -1,5 +1,20 @@
 # Coding Task
 
+## Project structure
+
+```sh
+.
+├── dat/  # Default directory for dataset
+├── doc/  # Assignment documentation
+├── results  # Results task 2
+│   └── run_YYYYMMDD_hhmmss  # One run of fine-tuning script 
+│       └── test/  # Files for reproduction and testset predictions
+└── src  # Source code for task 1 to 3
+    ├── task1
+    ├── task2
+    └── util
+```
+
 ## Requirements
 
 - Python 13.13 or higher
