@@ -12,7 +12,6 @@ from src.task2.eurosat_dataset import EuroSatDataset
 
 def dataloaders(
     dataset_dir: Path,
-    class_to_index_map: dict[str, int],
     split_files: dict,
     img_format: str,
     aug_dict: dict,
@@ -28,7 +27,6 @@ def dataloaders(
     train_dataset = EuroSatDataset(
         root_dir=dataset_dir,
         split_file=train_file,
-        class_to_index_map=class_to_index_map,
         img_format=img_format,
         transform=aug_dict[aug_name],
     )
@@ -36,7 +34,6 @@ def dataloaders(
     val_dataset = EuroSatDataset(
         root_dir=dataset_dir,
         split_file=val_file,
-        class_to_index_map=class_to_index_map,
         img_format=img_format,
         transform=aug_dict["val"],
     )
@@ -44,7 +41,6 @@ def dataloaders(
     test_dataset = EuroSatDataset(
         root_dir=dataset_dir,
         split_file=test_file,
-        class_to_index_map=class_to_index_map,
         img_format=img_format,
         transform=aug_dict["val"],
     )

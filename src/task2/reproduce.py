@@ -18,7 +18,6 @@ from src.constants import (
     BATCH_SIZE,
     BEST_MODEL_FILENAME,
     REPRODUCE_OUTPUT_DIR_NAME,
-    CLASS_INDEX_FILE,
     DATASET_DIR_NAME,
     IMG_FORMAT,
     LOGITS_TEST_SET_FILE,
@@ -28,7 +27,7 @@ from src.constants import (
 from src.task2.fine_tune import AUGMENTATIONS, test_model
 from src.task2._data_loader import dataloaders
 from src.task2._ranking_check import ranking_check
-from src.task2.util import class_to_index_map, index_to_class_map
+from src.task2._classname_index_mapping import index_to_class_map
 from src.task2._model import load_model_from_checkpoint
 from src.util.paths import find_most_recent_train_results_dir, root_path
 from src.util.run_config import get_dat_dir_args
@@ -66,7 +65,6 @@ def predict_on_test_set(
     with open(results_path, "w") as f:
         json.dump(results, f, indent=4)
 
-    # TODO Delete saving for final version
     # Save logits
     logits_path = output_dir / REPRODUCED_LOGITS_TEST_SET_FILE
     print(f"[5] Saving logits to {logits_path}")
@@ -76,7 +74,13 @@ def predict_on_test_set(
 
 
 def run():
-    """Runs predict script."""
+    """
+    Runs reproduce script.
+    Loads model from checkpoint and compare predictions of model on test set.
+    Saves top-/bottom-5 predictions in three classes as images
+
+    Results are saved in REPRODUCE_OUTPUT_DIR_NAME directory.
+    """
 
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()
@@ -87,7 +91,7 @@ def run():
     predictions_output_dir = find_most_recent_train_results_dir() / REPRODUCE_OUTPUT_DIR_NAME
     predictions_output_dir.mkdir(parents=False, exist_ok=True)
 
-    print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}\nIMG_EXT:  {IMG_FORMAT}\n")
+    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {IMG_FORMAT}\n")
     print(f"\nOutput directory: {predictions_output_dir}\n")
 
     # Setup
@@ -95,10 +99,7 @@ def run():
     print(f"Using device: {device}")
 
     # Load class mapping
-    class_index_file = Path(dataset_dir / CLASS_INDEX_FILE).resolve()
-    assert class_index_file.is_file(), f"Class index file not found at {class_index_file}"
-    index_to_class = index_to_class_map(class_index_file)
-    class_to_index = class_to_index_map(class_index_file)
+    index_to_class = index_to_class_map(dataset_dir)
     num_classes = len(index_to_class)
     print(f"Classes: {index_to_class}\n")
     print(f"Number of classes: {num_classes}")
@@ -114,7 +115,6 @@ def run():
     _, _, test_loader, test_dataset = dataloaders(
         dataset_dir=dataset_dir,
         split_files=SPLIT_FILES,
-        class_to_index_map=class_to_index,
         img_format=IMG_FORMAT,
         aug_dict=AUGMENTATIONS,
         aug_name="val",
@@ -145,6 +145,8 @@ def run():
         device=device,
         output_dir=predictions_output_dir,
     )
+
+    print("\n[✓] TASK 2 - Validation completed")
 
 
 if __name__ == "__main__":
