@@ -65,7 +65,6 @@ def predict_on_test_set(
     with open(results_path, "w") as f:
         json.dump(results, f, indent=4)
 
-    # TODO Delete saving for final version
     # Save logits
     logits_path = output_dir / REPRODUCED_LOGITS_TEST_SET_FILE
     print(f"[5] Saving logits to {logits_path}")
@@ -75,7 +74,13 @@ def predict_on_test_set(
 
 
 def run():
-    """Runs predict script."""
+    """
+    Runs reproduce script.
+    Loads model from checkpoint and compare predictions of model on test set.
+    Saves top-/bottom-5 predictions in three classes as images
+
+    Results are saved in REPRODUCE_OUTPUT_DIR_NAME directory.
+    """
 
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()

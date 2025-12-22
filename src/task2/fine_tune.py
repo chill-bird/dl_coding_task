@@ -33,7 +33,7 @@ from src.util.paths import results_parent_dir, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
 
-
+# Data augmentations for model selection
 AUGMENTATIONS = {
     "mild": transforms.Compose(
         [
@@ -65,6 +65,7 @@ AUGMENTATIONS = {
 
 def calculate_metrics(outputs: torch.Tensor, targets: torch.Tensor) -> tuple[float, list[float]]:
     """Calculate accuracy and per-class TPR (True Positive Rate)."""
+
     _, predicted = torch.max(outputs, 1)
 
     # Overall accuracy
@@ -91,6 +92,7 @@ def train_epoch(
     device: torch.device,
 ) -> tuple[float, float, list[float]]:
     """Train for one epoch."""
+
     model.train()
     total_loss = 0.0
     all_outputs = []
@@ -121,6 +123,7 @@ def validate(
     model: nn.Module, val_loader, criterion: nn.Module, device: torch.device
 ) -> tuple[float, float, list[float]]:
     """Validate the model."""
+
     model.eval()
     total_loss = 0.0
     all_outputs = []
@@ -154,11 +157,12 @@ def train_model(
     learning_rate: float,
 ) -> tuple[nn.Module, dict[str, list]]:
     """Train model with early stopping based on validation accuracy."""
+
     criterion = nn.CrossEntropyLoss()  # for multi-class
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="max", factor=0.5, patience=3
-    )  # TODO: Check if necessary
+    )  # Adjust learning rate
 
     history = {
         "train_loss": [],
@@ -247,6 +251,10 @@ def fine_tune(
     seed: int,
 ) -> tuple[Path, Path]:
     """
+    Fine-tunes model for EuroSat image classification.
+    Two models, varying in augmentation mode, are trained.
+    Selects model based on validation accuracy.
+
     Args:
         dataset_dir: Directory containing dataset (sub directory of dat_dir)
         img_format: Image file extension of dataset
@@ -289,7 +297,6 @@ def fine_tune(
     best_val_accuracy = 0.0
     best_augmentation = None
 
-    # TODO: Save overall best model to make predictions
     for augmentation_name in ["mild", "advanced"]:
         print(f"\n{'='*30}")
         print(f"Training with {augmentation_name.upper()} augmentation")
