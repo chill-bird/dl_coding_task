@@ -19,7 +19,7 @@
 ## Task 2
 
 - [x] Dataset class
-- [ ] Check assignment notes: "Channels with indices 3,2,1 (in this inverse order it is equal RGB in the MS part)"
+- [x] Check assignment notes: "Channels with indices 3,2,1 (in this inverse order it is equal RGB in the MS part)"
 - [x] Change execution to current run directory instead of copying file to root directory
 - [x] Adjust prediction script to reproduce script
 - [ ] Hyper parameter testing?
@@ -28,6 +28,7 @@
 
 ## Before Hand-in
 
+- [x] RGB mode only
 - [ ] Upload split files
 - [ ] Upload model
 - [ ] PDF for Task 2:
@@ -40,3 +41,4 @@
     – the top-5 and bottom-5 images
     – any links to cloud storage for things (e.g. saved models) which are too large to upload in
     elearning.
+

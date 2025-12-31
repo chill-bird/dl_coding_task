@@ -17,9 +17,8 @@ from datetime import datetime
 from src.constants import (
     BATCH_SIZE,
     BEST_MODEL_FILENAME,
-    DATASET_DIR_NAME,
+    RGB_DATASET_DIR_NAME,
     EPOCHS,
-    IMG_FORMAT,
     LEARNING_RATE,
     SEED,
     SPLIT_FILES,
@@ -399,16 +398,18 @@ def fine_tune(
 def run():
     """Runs fine tuning script."""
 
+    img_format = ".jpg"
+
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()
-    dataset_dir = dat_dir / DATASET_DIR_NAME
+    dataset_dir = dat_dir / RGB_DATASET_DIR_NAME
 
-    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {IMG_FORMAT}\n")
+    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {img_format}\n")
 
     # Run Task 2: Fine-tune model
     fine_tune(
         dataset_dir=dataset_dir,
-        img_format=IMG_FORMAT,
+        img_format=img_format,
         split_files=SPLIT_FILES,
         learning_rate=LEARNING_RATE,
         epochs=EPOCHS,
