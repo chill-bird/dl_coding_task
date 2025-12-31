@@ -7,8 +7,8 @@ Provides constants for project.
 
 ### Change for each run ###
 
-# DATASET = "euro_sat_ms"
-DATASET = "euro_sat_rgb"
+TIF_DATASET = "euro_sat_ms"
+RGB_DATASET = "euro_sat_rgb"
 
 
 ### Fixed constants ###
@@ -36,8 +36,8 @@ DATASETS = {
     },
 }
 
-DATASET_DIR_NAME = DATASETS[DATASET]["unzip_dirname"]
-IMG_FORMAT = DATASETS[DATASET]["format"]
+RGB_DATASET_DIR_NAME = DATASETS[RGB_DATASET]["unzip_dirname"]
+TIF_DATASET_DIR_NAME = DATASETS[TIF_DATASET]["unzip_dirname"]
 
 OUTPUT_DIR_NAME = "results"
 BEST_MODEL_FILENAME = "best_model.pt"
@@ -51,7 +51,6 @@ VAL_FILE = "valfile.csv"
 CLASS_INDEX_FILE = "class_index.csv"
 SPLIT_FILES = {"test": TEST_FILE, "train": TRAIN_FILE, "val": VAL_FILE}
 
-# TODO Adjust params for cluster training
 LEARNING_RATE = 0.001
 EPOCHS = 50
 BATCH_SIZE = 32

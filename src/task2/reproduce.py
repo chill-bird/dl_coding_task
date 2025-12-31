@@ -18,8 +18,7 @@ from src.constants import (
     BATCH_SIZE,
     BEST_MODEL_FILENAME,
     REPRODUCE_OUTPUT_DIR_NAME,
-    DATASET_DIR_NAME,
-    IMG_FORMAT,
+    RGB_DATASET_DIR_NAME,
     LOGITS_TEST_SET_FILE,
     REPRODUCED_LOGITS_TEST_SET_FILE,
     SPLIT_FILES,
@@ -82,16 +81,18 @@ def run():
     Results are saved in REPRODUCE_OUTPUT_DIR_NAME directory.
     """
 
+    img_format = ".jpg"
+
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()
-    dataset_dir = dat_dir / DATASET_DIR_NAME
+    dataset_dir = dat_dir / RGB_DATASET_DIR_NAME
     results_dir = find_most_recent_train_results_dir()
     model_path = results_dir / BEST_MODEL_FILENAME
     previous_predictions_path = results_dir / LOGITS_TEST_SET_FILE
     predictions_output_dir = find_most_recent_train_results_dir() / REPRODUCE_OUTPUT_DIR_NAME
     predictions_output_dir.mkdir(parents=False, exist_ok=True)
 
-    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {IMG_FORMAT}\n")
+    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {img_format}\n")
     print(f"\nOutput directory: {predictions_output_dir}\n")
 
     # Setup
@@ -115,7 +116,7 @@ def run():
     _, _, test_loader, test_dataset = dataloaders(
         dataset_dir=dataset_dir,
         split_files=SPLIT_FILES,
-        img_format=IMG_FORMAT,
+        img_format=img_format,
         aug_dict=AUGMENTATIONS,
         aug_name="val",
         batch_size=BATCH_SIZE,

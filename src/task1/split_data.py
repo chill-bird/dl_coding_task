@@ -9,7 +9,7 @@ images for training, 1000 for validation and 2000 for testing.
 from pathlib import Path
 import numpy as np
 from sklearn.model_selection import train_test_split
-from src.constants import DATASET, DATASETS, IMG_FORMAT, SEED
+from src.constants import DATASETS, RGB_DATASET, TIF_DATASET, SEED
 from src.util.paths import dataset_path, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
@@ -108,7 +108,7 @@ def create_class_to_index_map(dataset_dir: Path):
                 f.write(f"{class_dir.name},{i}\n")
 
 
-def split_data(dat_dir: Path, dataset_name: str, seed: int):
+def split_data(dat_dir: Path, seed: int):
     """
     Creates stratified train-val-test split of the data located at dat_dir.
     Data in both datasets are equivalent except their image format.
@@ -126,39 +126,43 @@ def split_data(dat_dir: Path, dataset_name: str, seed: int):
 
     set_seed(seed)
 
-    print("[1] Unzipping all available data")
+    print("Unzipping all available data")
     unzip_data(DATASETS, dat_dir, check_if_exist=True)
 
-    print(f"\n[2] Collecting labelled images from {dataset_name} dataset")
-    dataset_dir = dataset_path(DATASETS, dataset_name, dat_dir)
-    img_format = DATASETS[dataset_name]["format"]
+    datasets = [RGB_DATASET, TIF_DATASET]
+    for index, dataset_name in enumerate(datasets):
+        img_format = DATASETS[dataset_name]["format"]
+        print(f"# {index+1}Creating Splits for {img_format} data...")
 
-    all_imgs, labels = get_filenames_and_classes(dataset_dir, img_format)
-    all_imgs = np.array(all_imgs)
-    labels = np.array(labels)
-    print(f"Found {len(all_imgs)} images across {len(np.unique(labels))} classes")
+        print(f"\n[1] Collecting labelled images from {dataset_name} dataset")
+        dataset_dir = dataset_path(DATASETS, dataset_name, dat_dir)
 
-    print("\n[3] Creating Splits")
-    # First split: 60% train, 40% temp
-    train_imgs, temp_imgs, train_labels, temp_labels = train_test_split(
-        all_imgs, labels, test_size=0.40, random_state=seed, stratify=labels
-    )
+        all_imgs, labels = get_filenames_and_classes(dataset_dir, img_format)
+        all_imgs = np.array(all_imgs)
+        labels = np.array(labels)
+        print(f"Found {len(all_imgs)} images across {len(np.unique(labels))} classes")
 
-    # Second split: Split the remaining 40% into 50% val and 50% test
-    val_imgs, test_imgs, val_labels, test_labels = train_test_split(
-        temp_imgs, temp_labels, test_size=0.50, random_state=seed, stratify=temp_labels
-    )
-    print_split_stats(train_imgs, val_imgs, test_imgs)
+        print("\n[2] Creating Splits")
+        # First split: 60% train, 40% temp
+        train_imgs, temp_imgs, train_labels, temp_labels = train_test_split(
+            all_imgs, labels, test_size=0.40, random_state=seed, stratify=labels
+        )
 
-    print("\n[4] Creating Split Files")
-    create_split_files(
-        dataset_dir, train_imgs, train_labels, val_imgs, val_labels, test_imgs, test_labels
-    )
-    create_class_to_index_map(dataset_dir)
+        # Second split: Split the remaining 40% into 50% val and 50% test
+        val_imgs, test_imgs, val_labels, test_labels = train_test_split(
+            temp_imgs, temp_labels, test_size=0.50, random_state=seed, stratify=temp_labels
+        )
+        print_split_stats(train_imgs, val_imgs, test_imgs)
 
-    print("\n[5] Checking split requirements")
-    verify_size_requirements(all_imgs, train_imgs, val_imgs, test_imgs)
-    verify_disjoint(train_imgs, val_imgs, test_imgs)
+        print("\n[3] Creating Split Files")
+        create_split_files(
+            dataset_dir, train_imgs, train_labels, val_imgs, val_labels, test_imgs, test_labels
+        )
+        create_class_to_index_map(dataset_dir)
+
+        print("\n[4] Checking split requirements")
+        verify_size_requirements(all_imgs, train_imgs, val_imgs, test_imgs)
+        verify_disjoint(train_imgs, val_imgs, test_imgs)
 
     print("\n[✓] TASK 1")
 
@@ -169,10 +173,10 @@ def run():
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()
 
-    print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}\nIMG_EXT:  {IMG_FORMAT}\n")
+    print(f"Settings:\nROOT DIR:{root_path()}\nDAT_DIR:  {dat_dir}")
 
     # Run Task 1
-    split_data(dat_dir, DATASET, seed=SEED)
+    split_data(dat_dir, seed=SEED)
 
 
 if __name__ == "__main__":

@@ -8,7 +8,6 @@ Provides custom class for EuroSAT dataset.
 import pandas as pd
 from pathlib import Path
 from PIL import Image
-from skimage.io import imread
 from torch.utils.data import Dataset
 from src.task2._classname_index_mapping import class_to_index_map
 
@@ -29,10 +28,7 @@ class EuroSatDataset(Dataset):
         self.class_to_index_map = class_to_index_map(self.root_dir)
         self.samples = self.read_imgs_from_split_file()
         self.img_format = img_format
-        assert self.img_format in [
-            ".jpg",
-            ".tif",
-        ], f"Image file extension must be one of '.jpg' or '.tif'. Got {img_format} instead"
+        assert self.img_format == ".jpg", "Image format must be set to '.jpg' for task 2."
 
     def __len__(self):
         """Sample size"""
@@ -42,9 +38,7 @@ class EuroSatDataset(Dataset):
         """Get a single sample"""
         sample = self.samples[index]
         file_path = sample["file"]
-        img = (
-            Image.open(file_path).convert("RGB") if self.img_format == ".jpg" else imread(file_path)
-        )
+        img = Image.open(file_path).convert("RGB")
         img = self.transform(img)
 
         label = sample["label"]
