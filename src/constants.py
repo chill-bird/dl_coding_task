@@ -39,6 +39,9 @@ REPRODUCE_OUTPUT_DIR_NAME = "test"
 LOGITS_TEST_SET_FILE = "test_logits_best_model.npy"
 REPRODUCED_LOGITS_TEST_SET_FILE = "reproduced_test_logits_best_model.npy"
 
+OUTPUT_DIR_FINETUNED_TASK2 = "task2_finetuned"
+OUTPUT_DIR_FINETUNED_TASK3 = "task3_finetuned"
+
 TEST_FILE = "testfile.csv"
 TRAIN_FILE = "trainfile.csv"
 VAL_FILE = "valfile.csv"

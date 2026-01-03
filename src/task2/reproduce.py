@@ -28,7 +28,7 @@ from src.task2._data_loader import dataloaders
 from src.task2._ranking_check import ranking_check
 from src.task2._classname_index_mapping import index_to_class_map
 from src.task2._model import load_model_from_checkpoint
-from src.util.paths import find_most_recent_train_results_dir, root_path
+from src.util.paths import find_task2_trained_model_dir, root_path
 from src.util.run_config import get_dat_dir_args
 
 
@@ -86,10 +86,10 @@ def run():
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()
     dataset_dir = dat_dir / RGB_DATASET_DIR_NAME
-    results_dir = find_most_recent_train_results_dir()
+    results_dir = find_task2_trained_model_dir()
     model_path = results_dir / BEST_MODEL_FILENAME
     previous_predictions_path = results_dir / LOGITS_TEST_SET_FILE
-    predictions_output_dir = find_most_recent_train_results_dir() / REPRODUCE_OUTPUT_DIR_NAME
+    predictions_output_dir = find_task2_trained_model_dir() / REPRODUCE_OUTPUT_DIR_NAME
     predictions_output_dir.mkdir(parents=False, exist_ok=True)
 
     print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {img_format}\n")
