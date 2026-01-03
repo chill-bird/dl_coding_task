@@ -8,6 +8,7 @@ Provides constants for project.
 ### Change for each run ###
 
 TIF_DATASET = "euro_sat_ms"
+TIF_CHANNELS = [3,2,1,7,10,11] # Bands: Red, Green, Blue, NIR, SWIR1, SWIR2
 RGB_DATASET = "euro_sat_rgb"
 
 
@@ -49,5 +50,5 @@ CLASS_INDEX_FILE = "class_index.csv"
 SPLIT_FILES = {"test": TEST_FILE, "train": TRAIN_FILE, "val": VAL_FILE}
 
 LEARNING_RATE = 0.001
-EPOCHS = 50
+EPOCHS = 100
 BATCH_SIZE = 32
