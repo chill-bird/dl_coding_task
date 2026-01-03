@@ -7,8 +7,6 @@
 #SBATCH --cpus-per-task=12
 #SBATCH --gres=gpu:1
 #SBATCH --partition=paula
-#SBATCH --mail-user=mb92adej@studserv.uni-leipzig.de
-#SBATCH --mail-type=ALL
 
 # load cuda module
 module load CUDA
