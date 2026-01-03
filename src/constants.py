@@ -28,12 +28,6 @@ DATASETS = {
         "unzip_dirname": "EuroSAT_RGB",
         "format": ".jpg",
     },
-    # EXAMPLE
-    "flowers": {
-        "zip_filename": "102flowersn.zip",
-        "unzip_dirname": "flowers_data",
-        "format": ".jpg",
-    },
 }
 
 RGB_DATASET_DIR_NAME = DATASETS[RGB_DATASET]["unzip_dirname"]
@@ -44,6 +38,9 @@ BEST_MODEL_FILENAME = "best_model.pt"
 REPRODUCE_OUTPUT_DIR_NAME = "test"
 LOGITS_TEST_SET_FILE = "test_logits_best_model.npy"
 REPRODUCED_LOGITS_TEST_SET_FILE = "reproduced_test_logits_best_model.npy"
+
+OUTPUT_DIR_FINETUNED_TASK2 = "task2_finetuned"
+OUTPUT_DIR_FINETUNED_TASK3 = "task3_finetuned"
 
 TEST_FILE = "testfile.csv"
 TRAIN_FILE = "trainfile.csv"

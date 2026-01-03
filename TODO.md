@@ -2,14 +2,14 @@
 
 ## General
 
-- [ ] Check lecture requirements for seed
-- [ ] Check torch installation on cluster
-- [ ] Check normalization of images (currently using ImageNet mean & std)
-- [ ] Check if code for .tif formats should be removed in task 1 & 2
+- [ ] Reset `constants.py`
+- [x] Change reproduce script to use dedicated directories
+- [x] Remove Flower-set
+- [x] `README.md`: Explain functionality of `reproduce` script in more detail
 
 ### Nice-to-have
 
-- [ ] Download script? → is pw protected, so not that worth it
+- [x] Download script? → is pw protected, so not that worth it
 - [x] Outsource class mapping
 
 ## Task 1
@@ -22,7 +22,6 @@
 - [x] Check assignment notes: "Channels with indices 3,2,1 (in this inverse order it is equal RGB in the MS part)"
 - [x] Change execution to current run directory instead of copying file to root directory
 - [x] Adjust prediction script to reproduce script
-- [ ] Hyper parameter testing?
 
 ## Task 3
 
@@ -30,8 +29,8 @@
 
 - [x] RGB mode only
 - [ ] Upload split files
-- [ ] Upload model
-- [ ] PDF for Task 2:
+- [ ] Upload model output
+- [ ] Create PDF for Task 2:
     – the names of the team of students working on it
     – what parameters need to be set, so that we can run your code
     – what py-file to run to compute the prediction on the test data using the final model
@@ -41,4 +40,3 @@
     – the top-5 and bottom-5 images
     – any links to cloud storage for things (e.g. saved models) which are too large to upload in
     elearning.
-

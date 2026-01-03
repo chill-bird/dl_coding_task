@@ -4,7 +4,8 @@
 dat/**.zip
 dat/**.csv
 dat/**/
-results
+results/run_**
+**/test
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

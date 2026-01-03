@@ -5,7 +5,7 @@ paths.py
 Provides utility functions for locating paths in the project.
 """
 
-from src.constants import OUTPUT_DIR_NAME
+from src.constants import OUTPUT_DIR_NAME, OUTPUT_DIR_FINETUNED_TASK2, OUTPUT_DIR_FINETUNED_TASK3
 from pathlib import Path
 
 
@@ -47,16 +47,11 @@ def dataset_path(datasets: dict[str, dict], dataset_name: str, dat_dir: Path) ->
 def check_if_datasets_exist(dat_dir: Path):
     assert dat_dir.is_dir(), f"Data directory not found at {dat_dir}."
 
-    flowers_set_file = "102flowersn.zip"
     eurosat_ms_file = "EuroSAT_MS.zip"
     eurosat_rgb_file = "EuroSAT_RGB.zip"
-    flowers_set_file_location = Path(dat_dir / flowers_set_file).resolve()
     eurosat_ms_file_location = Path(dat_dir / eurosat_ms_file).resolve()
     eurosat_rgb_file_location = Path(dat_dir / eurosat_rgb_file).resolve()
 
-    assert (
-        flowers_set_file_location.is_file()
-    ), f"Flower data set does not exist at {flowers_set_file_location}"
     assert (
         eurosat_ms_file_location.is_file()
     ), f"Euro Sat MS data set does not exist at {eurosat_ms_file_location}"
@@ -71,3 +66,23 @@ def find_most_recent_train_results_dir() -> Path:
     results_parent_path = results_parent_dir()
     target_dir = sorted(results_parent_path.iterdir(), reverse=True)[0]
     return target_dir.resolve()
+
+
+def find_task2_trained_model_dir() -> Path:
+    """Returns path to output directory of model handed-in for task 2."""
+
+    results_parent_path = results_parent_dir()
+    target_dir = results_parent_path / OUTPUT_DIR_FINETUNED_TASK2
+    target_dir = target_dir.resolve()
+    assert target_dir.is_dir(), f"No output directory found for task 2 under {target_dir.resolve()}"
+    return target_dir
+
+
+def find_task3_trained_model_dir() -> Path:
+    """Returns path to output directory of model handed-in for task 3."""
+
+    results_parent_path = results_parent_dir()
+    target_dir = results_parent_path / OUTPUT_DIR_FINETUNED_TASK3
+    target_dir = target_dir.resolve()
+    assert target_dir.is_dir(), f"No output directory found for task 3 under {target_dir.resolve()}"
+    return target_dir

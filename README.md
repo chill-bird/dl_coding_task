@@ -7,8 +7,18 @@
 ├── dat/  # Default directory for dataset
 ├── doc/  # Assignment documentation
 ├── results/  # Results task 2
-│   └── run_YYYYMMDD_hhmmss/  # One run of fine-tuning script 
-│       └── test/  # Files for reproduction and testset predictions
+│   └── task2_finetuned/  # Fine-tuned model for hand-in (Task 2) 
+│       └── best_model.pt  # Trained model from the two augmentations
+│       └── test_logits_best_model.npy  # Saved logits on test split
+│       └── training_history_**.png  # Training history for each augmentation
+│       └── training_results.json  # JSON dump for training history on both augmentation
+│       └── test/  # Directory which is created when reproduction script is run
+│   └── task3_finetuned/  # Fine-tuned model for hand-in (Task 3) 
+│       └── best_model.pt  # Trained model from the two augmentations
+│       └── test_logits_best_model.npy  # Saved logits on test split
+│       └── training_history_**.png  # Training history for each augmentation
+│       └── training_results.json  # JSON dump for training history on both augmentation
+│       └── test/  # Directory which is created when reproduction script is run│   └── run_YYYYMMDD_hhmmss/  # New run of fine-tuning script 
 └── src/  # Source code for task 1 to 3
     ├── task1/
     ├── task2/
@@ -18,6 +28,7 @@
 ## Requirements
 
 - Python 13.13 or higher
+- Git LFS installed
 
 ## Getting Started
 
@@ -35,7 +46,7 @@ For each task, activate your virtual environment, first, and set active working 
 
 ### Task 1
 
-Unzip raw files and split data into train, test, val set:
+Unzip raw files and split data into train, test, val set. Split files and classname-index associations are saved to `DAT_DIR`.
 
 ```sh
 python -m src.task1.split_data -d <ABSOLUTE_PATH_TO_DAT_DIR_>
@@ -45,13 +56,15 @@ python -m src.task1.split_data -d <ABSOLUTE_PATH_TO_DAT_DIR_>
 
 ### Fine tune model
 
-Fine-tune model
+Fine-tune model for RGB data. When script is run, a new directory named `run_YYYYMMDD_hhmmss` is created and hyper parameters from `constants.py` are used for training.
 
 ```sh
 python -m src.task2.fine_tune -d <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
 
 ### Test saved model for reproducibility and perform visual ranking check
+
+Load the saved model at `./results/task2_finetuned/best_model.pt`. Runs predictions on model on test split and prints results to terminal. Creates images for top/bottom 5 best scoring models for 3 classes.
 
 ```sh
 python -m src.task2.reproduce -d <ABSOLUTE_PATH_TO_DAT_DIR_>
