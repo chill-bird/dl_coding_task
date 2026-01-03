@@ -2,6 +2,11 @@
 
 ## General
 
+- [ ] Reset `constants.py`
+- [ ] Change reproduce script to use dedicated directories
+- [x] Remove Flower-set
+- [ ] `README.md`: Explain functionality of `reproduce` script in more detail
+
 - [ ] Check lecture requirements for seed
 - [ ] Check torch installation on cluster
 - [ ] Check normalization of images (currently using ImageNet mean & std)
@@ -41,4 +46,3 @@
     – the top-5 and bottom-5 images
     – any links to cloud storage for things (e.g. saved models) which are too large to upload in
     elearning.
-

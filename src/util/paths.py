@@ -47,16 +47,11 @@ def dataset_path(datasets: dict[str, dict], dataset_name: str, dat_dir: Path) ->
 def check_if_datasets_exist(dat_dir: Path):
     assert dat_dir.is_dir(), f"Data directory not found at {dat_dir}."
 
-    flowers_set_file = "102flowersn.zip"
     eurosat_ms_file = "EuroSAT_MS.zip"
     eurosat_rgb_file = "EuroSAT_RGB.zip"
-    flowers_set_file_location = Path(dat_dir / flowers_set_file).resolve()
     eurosat_ms_file_location = Path(dat_dir / eurosat_ms_file).resolve()
     eurosat_rgb_file_location = Path(dat_dir / eurosat_rgb_file).resolve()
 
-    assert (
-        flowers_set_file_location.is_file()
-    ), f"Flower data set does not exist at {flowers_set_file_location}"
     assert (
         eurosat_ms_file_location.is_file()
     ), f"Euro Sat MS data set does not exist at {eurosat_ms_file_location}"

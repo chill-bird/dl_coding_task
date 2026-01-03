@@ -28,12 +28,6 @@ DATASETS = {
         "unzip_dirname": "EuroSAT_RGB",
         "format": ".jpg",
     },
-    # EXAMPLE
-    "flowers": {
-        "zip_filename": "102flowersn.zip",
-        "unzip_dirname": "flowers_data",
-        "format": ".jpg",
-    },
 }
 
 RGB_DATASET_DIR_NAME = DATASETS[RGB_DATASET]["unzip_dirname"]
