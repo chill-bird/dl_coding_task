@@ -87,4 +87,35 @@ python -m src.task3.reproduce -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
 
 ## High Performance Computing
+### Preparation
+1. Create a `/dat` directory in your `/work` folder and copy the `.zip` files into it.
+2. Copy the `requirements.txt` file as well as the `/src` and `/hpc` folders as well.
+3. Create a conda environment named `dl_coding_task`, activate it, and run `pip -r install requirements.txt`
 
+### Run
+
+#### Task 1
+
+```sh
+sbatch hpc/task1.slurm
+```
+
+### Task 2
+#### Fine-Tune
+```sh
+sbatch hpc/task2_1.slurm
+```
+#### Reproduce
+```sh
+sbatch hpc/task2_2.slurm
+```
+
+### Task 3
+#### Fine-Tune
+```sh
+sbatch hpc/task3_1.slurm
+```
+#### Reproduce
+```sh
+sbatch hpc/task3_2.slurm
+```
