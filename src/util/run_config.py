@@ -15,7 +15,8 @@ def get_args():
         help="Path to data directory containing zip files",
     )
     parser.add_argument(
-        "--root_dir" "-R",
+        "--root_dir",
+        "-R",
         type=str,
         default=None,
         help="Path to root directory of the project code",

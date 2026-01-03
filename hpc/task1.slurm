@@ -5,6 +5,7 @@
 #SBATCH --time=24:00:00
 #SBATCH --mem=200GB
 #SBATCH --cpus-per-task=12
+#SBATCH --gres=gpu:1
 #SBATCH --partition=paula
 #SBATCH --mail-user=mb92adej@studserv.uni-leipzig.de
 #SBATCH --mail-type=ALL
