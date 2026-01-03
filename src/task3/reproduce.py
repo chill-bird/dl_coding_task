@@ -26,7 +26,7 @@ from src.constants import (
 from src.task3.fine_tune import AUGMENTATIONS, test_model
 from src.task3._data_loader import dataloaders
 from src.task3._ranking_check import ranking_check
-from src.task3._classname_index_mapping import index_to_class_map
+from src.task2._classname_index_mapping import index_to_class_map
 from src.task3._model import load_model_from_checkpoint
 from src.util.paths import find_most_recent_train_results_dir, root_path
 from src.util.run_config import get_dat_dir_args

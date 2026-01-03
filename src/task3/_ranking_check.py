@@ -66,13 +66,18 @@ def find_top_bottom_images(
         bottom_5_indices = sorted_indices[-5:].numpy()
 
         results[class_name] = {
-            "top_5": top_5_indices.tolist(),
-            "bottom_5": bottom_5_indices.tolist(),
+            "top_5": [
+                test_dataset.samples[idx]["file"].name for idx in top_5_indices.tolist()
+            ],
+            "bottom_5": [
+                test_dataset.samples[idx]["file"].name for idx in bottom_5_indices.tolist()
+            ],
             "top_5_scores": class_scores[top_5_indices].numpy().tolist(),
             "bottom_5_scores": class_scores[bottom_5_indices].numpy().tolist(),
         }
 
     return results, all_logits
+
 
 def ranking_check(model, test_dataset, test_loader, index_to_class, device, output_dir):
     """Ranking check for 3 classes."""

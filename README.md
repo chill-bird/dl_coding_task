@@ -105,17 +105,11 @@ sbatch hpc/task1.slurm
 ```sh
 sbatch hpc/task2_1.slurm
 ```
-#### Reproduce
-```sh
-sbatch hpc/task2_2.slurm
-```
+
 
 ### Task 3
 #### Fine-Tune
 ```sh
 sbatch hpc/task3_1.slurm
 ```
-#### Reproduce
-```sh
-sbatch hpc/task3_2.slurm
-```
+

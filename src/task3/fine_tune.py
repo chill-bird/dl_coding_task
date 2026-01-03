@@ -26,8 +26,8 @@ from src.constants import (
 )
 from src.task3._data_loader import dataloaders
 from src.task3._model import get_model
-from src.task3._plot import plot_training_history
-from src.task3._classname_index_mapping import index_to_class_map
+from src.task2._plot import plot_training_history
+from src.task2._classname_index_mapping import index_to_class_map
 from src.util.paths import results_parent_dir, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
