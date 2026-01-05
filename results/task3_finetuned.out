@@ -1,0 +1,599 @@
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/condabin/conda
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/bin/conda
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/bin/conda-env
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/bin/activate
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/bin/deactivate
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/etc/profile.d/conda.sh
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/etc/fish/conf.d/conda.fish
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/shell/condabin/Conda.psm1
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/shell/condabin/conda-hook.ps1
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/lib/python3.11/site-packages/xontrib/conda.xsh
+no change     /software/easybuild/el9/amd_zen3/all/Anaconda3/2024.02-1/etc/profile.d/conda.csh
+no change     /home/sc.uni-leipzig.de/mb92adej/.bashrc
+No action taken.
+Settings:
+ROOT DIR: /work/mb92adej-dl
+DAT DIR: /work/mb92adej-dl/dat
+IMG_EXT: .tif
+
+============================================================
+TASK 3 - Training model
+============================================================
+
+Setting seed 3780947...
+
+
+Output directory: /work/mb92adej-dl/results/run_20260104_124502
+
+Using device: cuda
+
+Classes: {0: 'AnnualCrop', 1: 'Forest', 2: 'HerbaceousVegetation', 3: 'Highway', 4: 'Industrial', 5: 'Pasture', 6: 'PermanentCrop', 7: 'Residential', 8: 'River', 9: 'SeaLake'}
+
+Number of classes: 10
+Saved stats to: /work/mb92adej-dl/results/run_20260104_124502/ms_stats.json
+
+==============================
+Training with MILD augmentation
+==============================
+
+Train set size: 16200
+Val set size: 5400
+Test set size: 5400
+
+Model: ResNet50LateFusion
+
+
+Epoch 1/100
+Train Loss: 0.4378, Val Loss: 0.5915
+Train Acc: 0.8760, Val Acc: 0.8448
+Val TPR per class: ['0.9767', '0.5183', '0.9500', '0.9520', '0.8680', '0.8700', '0.8020', '0.5850', '0.9820', '0.9900']
+✓ Best model updated (Val Acc: 0.8448)
+
+Epoch 2/100
+Train Loss: 0.2671, Val Loss: 0.4615
+Train Acc: 0.9194, Val Acc: 0.8783
+Val TPR per class: ['0.9200', '0.9683', '0.9767', '0.8080', '0.9460', '0.9175', '0.8300', '0.5133', '0.9340', '0.9833']
+✓ Best model updated (Val Acc: 0.8783)
+
+Epoch 3/100
+Train Loss: 0.1992, Val Loss: 0.4839
+Train Acc: 0.9372, Val Acc: 0.8861
+Val TPR per class: ['0.9867', '0.8967', '0.8033', '0.7620', '0.9740', '0.9500', '0.8180', '0.7350', '0.9660', '0.9867']
+✓ Best model updated (Val Acc: 0.8861)
+
+Epoch 4/100
+Train Loss: 0.2069, Val Loss: 0.6973
+Train Acc: 0.9383, Val Acc: 0.8293
+Val TPR per class: ['0.9083', '0.9650', '0.9817', '0.6500', '0.9580', '0.6625', '0.5560', '0.6350', '0.8820', '0.9933']
+
+Epoch 5/100
+Train Loss: 0.1725, Val Loss: 0.2860
+Train Acc: 0.9460, Val Acc: 0.9048
+Val TPR per class: ['0.9767', '0.9950', '0.9367', '0.9220', '0.7740', '0.8275', '0.5820', '0.9983', '0.9480', '0.9967']
+✓ Best model updated (Val Acc: 0.9048)
+
+Epoch 6/100
+Train Loss: 0.1557, Val Loss: 0.1913
+Train Acc: 0.9528, Val Acc: 0.9456
+Val TPR per class: ['0.9900', '0.9967', '0.8517', '0.9420', '0.9980', '0.9075', '0.9120', '0.9183', '0.9320', '0.9950']
+✓ Best model updated (Val Acc: 0.9456)
+
+Epoch 7/100
+Train Loss: 0.1454, Val Loss: 0.1816
+Train Acc: 0.9551, Val Acc: 0.9433
+Val TPR per class: ['0.9233', '0.9933', '0.9650', '0.9460', '0.9860', '0.8350', '0.8000', '0.9717', '0.9680', '0.9967']
+
+Epoch 8/100
+Train Loss: 0.1396, Val Loss: 0.3375
+Train Acc: 0.9587, Val Acc: 0.9246
+Val TPR per class: ['0.9517', '0.9983', '0.9717', '0.9600', '0.9240', '0.9325', '0.5440', '0.9683', '0.9480', '0.9967']
+
+Epoch 9/100
+Train Loss: 0.1388, Val Loss: 0.1739
+Train Acc: 0.9582, Val Acc: 0.9554
+Val TPR per class: ['0.9600', '0.9833', '0.9333', '0.9100', '0.9800', '0.8575', '0.9700', '0.9617', '0.9760', '0.9917']
+✓ Best model updated (Val Acc: 0.9554)
+
+Epoch 10/100
+Train Loss: 0.1316, Val Loss: 0.3849
+Train Acc: 0.9586, Val Acc: 0.8922
+Val TPR per class: ['0.9167', '0.9983', '0.8917', '0.8220', '0.7160', '0.8875', '0.6500', '0.9983', '0.9720', '1.0000']
+
+Epoch 11/100
+Train Loss: 0.1207, Val Loss: 0.3430
+Train Acc: 0.9635, Val Acc: 0.9413
+Val TPR per class: ['0.9783', '0.9967', '0.8633', '0.8900', '0.9280', '0.9775', '0.8480', '0.9800', '0.9460', '0.9917']
+
+Epoch 12/100
+Train Loss: 0.1118, Val Loss: 0.6818
+Train Acc: 0.9641, Val Acc: 0.8550
+Val TPR per class: ['0.9617', '0.9317', '0.5333', '0.9740', '0.9700', '0.7900', '0.9520', '0.5450', '0.9700', '0.9750']
+
+Epoch 13/100
+Train Loss: 0.1064, Val Loss: 0.1200
+Train Acc: 0.9675, Val Acc: 0.9604
+Val TPR per class: ['0.9750', '0.9983', '0.9650', '0.9620', '0.9700', '0.9300', '0.7940', '1.0000', '0.9800', '0.9967']
+✓ Best model updated (Val Acc: 0.9604)
+
+Epoch 14/100
+Train Loss: 0.1134, Val Loss: 0.1861
+Train Acc: 0.9653, Val Acc: 0.9459
+Val TPR per class: ['0.9833', '0.9650', '0.8967', '0.9600', '0.9820', '0.9725', '0.7140', '0.9917', '0.9820', '0.9967']
+
+Epoch 15/100
+Train Loss: 0.0962, Val Loss: 0.8695
+Train Acc: 0.9709, Val Acc: 0.9189
+Val TPR per class: ['0.9583', '0.9750', '0.9850', '0.8960', '0.9900', '0.9325', '0.6740', '0.8100', '0.9580', '0.9883']
+
+Epoch 16/100
+Train Loss: 0.0855, Val Loss: 0.2076
+Train Acc: 0.9735, Val Acc: 0.9431
+Val TPR per class: ['0.9783', '0.9717', '0.9850', '0.9440', '0.9440', '0.8800', '0.8660', '0.8717', '0.9620', '0.9983']
+
+Epoch 17/100
+Train Loss: 0.0886, Val Loss: 0.2108
+Train Acc: 0.9728, Val Acc: 0.9535
+Val TPR per class: ['0.9650', '0.9967', '0.9733', '0.8940', '0.9980', '0.9050', '0.9140', '0.9067', '0.9700', '0.9900']
+
+Epoch 18/100
+Train Loss: 0.0429, Val Loss: 0.0751
+Train Acc: 0.9863, Val Acc: 0.9776
+Val TPR per class: ['0.9750', '1.0000', '0.9633', '0.9760', '0.9840', '0.9475', '0.9440', '0.9983', '0.9760', '0.9967']
+✓ Best model updated (Val Acc: 0.9776)
+
+Epoch 19/100
+Train Loss: 0.0370, Val Loss: 0.1314
+Train Acc: 0.9880, Val Acc: 0.9654
+Val TPR per class: ['0.9883', '0.9933', '0.8900', '0.9480', '0.9820', '0.9550', '0.9120', '0.9883', '0.9940', '0.9950']
+
+Epoch 20/100
+Train Loss: 0.0279, Val Loss: 0.0885
+Train Acc: 0.9917, Val Acc: 0.9754
+Val TPR per class: ['0.9750', '0.9967', '0.9717', '0.9840', '0.9500', '0.9325', '0.9540', '0.9950', '0.9760', '0.9983']
+
+Epoch 21/100
+Train Loss: 0.0303, Val Loss: 0.0800
+Train Acc: 0.9897, Val Acc: 0.9793
+Val TPR per class: ['0.9750', '0.9983', '0.9783', '0.9860', '0.9600', '0.9525', '0.9580', '1.0000', '0.9700', '0.9983']
+✓ Best model updated (Val Acc: 0.9793)
+
+Epoch 22/100
+Train Loss: 0.0237, Val Loss: 0.1703
+Train Acc: 0.9920, Val Acc: 0.9524
+Val TPR per class: ['0.9817', '0.9283', '0.9167', '0.9900', '0.9740', '0.9450', '0.9120', '0.9083', '0.9780', '0.9950']
+
+Epoch 23/100
+Train Loss: 0.0274, Val Loss: 0.1341
+Train Acc: 0.9912, Val Acc: 0.9700
+Val TPR per class: ['0.9867', '0.9800', '0.9817', '0.9660', '0.9880', '0.9200', '0.9100', '0.9750', '0.9700', '0.9983']
+
+Epoch 24/100
+Train Loss: 0.0282, Val Loss: 0.1352
+Train Acc: 0.9905, Val Acc: 0.9689
+Val TPR per class: ['0.9883', '0.9933', '0.9733', '0.9860', '0.9700', '0.9325', '0.8480', '0.9967', '0.9760', '0.9967']
+
+Epoch 25/100
+Train Loss: 0.0280, Val Loss: 0.1307
+Train Acc: 0.9909, Val Acc: 0.9622
+Val TPR per class: ['0.9800', '1.0000', '0.9600', '0.9560', '0.8540', '0.9500', '0.9040', '1.0000', '0.9920', '0.9983']
+
+Epoch 26/100
+Train Loss: 0.0130, Val Loss: 0.0734
+Train Acc: 0.9951, Val Acc: 0.9820
+Val TPR per class: ['0.9850', '0.9967', '0.9683', '0.9860', '0.9700', '0.9625', '0.9600', '0.9983', '0.9840', '0.9983']
+✓ Best model updated (Val Acc: 0.9820)
+
+Epoch 27/100
+Train Loss: 0.0110, Val Loss: 0.0816
+Train Acc: 0.9966, Val Acc: 0.9804
+Val TPR per class: ['0.9833', '0.9950', '0.9767', '0.9860', '0.9760', '0.9425', '0.9420', '0.9967', '0.9880', '1.0000']
+
+Epoch 28/100
+Train Loss: 0.0077, Val Loss: 0.0812
+Train Acc: 0.9974, Val Acc: 0.9813
+Val TPR per class: ['0.9733', '0.9933', '0.9750', '0.9900', '0.9820', '0.9475', '0.9680', '0.9950', '0.9760', '1.0000']
+
+Epoch 29/100
+Train Loss: 0.0068, Val Loss: 0.0852
+Train Acc: 0.9978, Val Acc: 0.9806
+Val TPR per class: ['0.9733', '0.9917', '0.9817', '0.9860', '0.9700', '0.9550', '0.9540', '0.9967', '0.9860', '0.9983']
+
+Epoch 30/100
+Train Loss: 0.0071, Val Loss: 0.0850
+Train Acc: 0.9979, Val Acc: 0.9813
+Val TPR per class: ['0.9833', '0.9917', '0.9883', '0.9780', '0.9880', '0.9425', '0.9500', '0.9933', '0.9820', '0.9983']
+
+Epoch 31/100
+Train Loss: 0.0040, Val Loss: 0.0893
+Train Acc: 0.9986, Val Acc: 0.9819
+Val TPR per class: ['0.9733', '0.9967', '0.9767', '0.9880', '0.9780', '0.9500', '0.9700', '0.9967', '0.9760', '1.0000']
+
+Epoch 32/100
+Train Loss: 0.0039, Val Loss: 0.0850
+Train Acc: 0.9989, Val Acc: 0.9822
+Val TPR per class: ['0.9817', '1.0000', '0.9767', '0.9760', '0.9820', '0.9600', '0.9540', '0.9967', '0.9840', '0.9983']
+✓ Best model updated (Val Acc: 0.9822)
+
+Epoch 33/100
+Train Loss: 0.0050, Val Loss: 0.1004
+Train Acc: 0.9988, Val Acc: 0.9809
+Val TPR per class: ['0.9917', '0.9983', '0.9833', '0.9860', '0.9840', '0.9325', '0.9420', '0.9950', '0.9740', '1.0000']
+
+Epoch 34/100
+Train Loss: 0.0075, Val Loss: 0.0887
+Train Acc: 0.9986, Val Acc: 0.9809
+Val TPR per class: ['0.9867', '0.9983', '0.9733', '0.9900', '0.9820', '0.9400', '0.9520', '0.9933', '0.9780', '0.9983']
+
+Epoch 35/100
+Train Loss: 0.0058, Val Loss: 0.0852
+Train Acc: 0.9988, Val Acc: 0.9793
+Val TPR per class: ['0.9817', '0.9983', '0.9683', '0.9800', '0.9820', '0.9375', '0.9560', '0.9933', '0.9800', '0.9983']
+
+Epoch 36/100
+Train Loss: 0.0032, Val Loss: 0.0899
+Train Acc: 0.9989, Val Acc: 0.9819
+Val TPR per class: ['0.9800', '0.9983', '0.9817', '0.9780', '0.9820', '0.9450', '0.9580', '0.9967', '0.9840', '0.9983']
+
+Epoch 37/100
+Train Loss: 0.0014, Val Loss: 0.0858
+Train Acc: 0.9997, Val Acc: 0.9830
+Val TPR per class: ['0.9833', '0.9933', '0.9833', '0.9840', '0.9800', '0.9600', '0.9520', '0.9967', '0.9860', '0.9983']
+✓ Best model updated (Val Acc: 0.9830)
+
+Epoch 38/100
+Train Loss: 0.0011, Val Loss: 0.0887
+Train Acc: 0.9997, Val Acc: 0.9826
+Val TPR per class: ['0.9767', '0.9967', '0.9783', '0.9860', '0.9780', '0.9600', '0.9640', '0.9967', '0.9780', '1.0000']
+
+Epoch 39/100
+Train Loss: 0.0016, Val Loss: 0.0891
+Train Acc: 0.9995, Val Acc: 0.9817
+Val TPR per class: ['0.9850', '0.9950', '0.9833', '0.9820', '0.9820', '0.9475', '0.9520', '0.9950', '0.9780', '1.0000']
+
+Epoch 40/100
+Train Loss: 0.0014, Val Loss: 0.0946
+Train Acc: 0.9996, Val Acc: 0.9820
+Val TPR per class: ['0.9800', '0.9983', '0.9783', '0.9840', '0.9740', '0.9350', '0.9720', '1.0000', '0.9800', '1.0000']
+
+Epoch 41/100
+Train Loss: 0.0010, Val Loss: 0.0936
+Train Acc: 0.9997, Val Acc: 0.9837
+Val TPR per class: ['0.9850', '0.9983', '0.9817', '0.9880', '0.9840', '0.9425', '0.9620', '0.9933', '0.9860', '1.0000']
+✓ Best model updated (Val Acc: 0.9837)
+
+Epoch 42/100
+Train Loss: 0.0009, Val Loss: 0.1008
+Train Acc: 0.9996, Val Acc: 0.9831
+Val TPR per class: ['0.9817', '0.9983', '0.9817', '0.9920', '0.9760', '0.9400', '0.9640', '0.9983', '0.9820', '1.0000']
+
+Epoch 43/100
+Train Loss: 0.0015, Val Loss: 0.0955
+Train Acc: 0.9993, Val Acc: 0.9844
+Val TPR per class: ['0.9733', '0.9917', '0.9800', '0.9880', '0.9760', '0.9650', '0.9780', '0.9983', '0.9860', '1.0000']
+✓ Best model updated (Val Acc: 0.9844)
+
+Epoch 44/100
+Train Loss: 0.0003, Val Loss: 0.0997
+Train Acc: 1.0000, Val Acc: 0.9817
+Val TPR per class: ['0.9817', '0.9983', '0.9750', '0.9920', '0.9760', '0.9500', '0.9500', '0.9967', '0.9820', '1.0000']
+
+Epoch 45/100
+Train Loss: 0.0012, Val Loss: 0.1029
+Train Acc: 0.9996, Val Acc: 0.9828
+Val TPR per class: ['0.9833', '0.9967', '0.9850', '0.9900', '0.9780', '0.9375', '0.9660', '0.9950', '0.9800', '0.9983']
+
+Epoch 46/100
+Train Loss: 0.0012, Val Loss: 0.0995
+Train Acc: 0.9996, Val Acc: 0.9839
+Val TPR per class: ['0.9800', '0.9967', '0.9817', '0.9880', '0.9800', '0.9500', '0.9740', '0.9950', '0.9800', '1.0000']
+
+Epoch 47/100
+Train Loss: 0.0008, Val Loss: 0.1163
+Train Acc: 0.9998, Val Acc: 0.9789
+Val TPR per class: ['0.9867', '0.9967', '0.9817', '0.9860', '0.9820', '0.9550', '0.9300', '0.9933', '0.9600', '1.0000']
+
+Epoch 48/100
+Train Loss: 0.0007, Val Loss: 0.1032
+Train Acc: 0.9997, Val Acc: 0.9824
+Val TPR per class: ['0.9833', '0.9983', '0.9850', '0.9840', '0.9780', '0.9575', '0.9520', '0.9967', '0.9740', '1.0000']
+
+Epoch 49/100
+Train Loss: 0.0005, Val Loss: 0.1034
+Train Acc: 0.9998, Val Acc: 0.9824
+Val TPR per class: ['0.9800', '0.9983', '0.9833', '0.9880', '0.9760', '0.9375', '0.9660', '0.9967', '0.9820', '0.9983']
+
+Epoch 50/100
+Train Loss: 0.0013, Val Loss: 0.1054
+Train Acc: 0.9996, Val Acc: 0.9815
+Val TPR per class: ['0.9850', '0.9983', '0.9833', '0.9900', '0.9780', '0.9400', '0.9440', '0.9950', '0.9820', '1.0000']
+
+Epoch 51/100
+Train Loss: 0.0009, Val Loss: 0.1058
+Train Acc: 0.9997, Val Acc: 0.9817
+Val TPR per class: ['0.9817', '0.9983', '0.9800', '0.9860', '0.9840', '0.9375', '0.9600', '0.9933', '0.9780', '1.0000']
+
+Epoch 52/100
+Train Loss: 0.0004, Val Loss: 0.1021
+Train Acc: 0.9999, Val Acc: 0.9815
+Val TPR per class: ['0.9817', '0.9983', '0.9817', '0.9880', '0.9820', '0.9425', '0.9560', '0.9933', '0.9740', '1.0000']
+
+Epoch 53/100
+Train Loss: 0.0010, Val Loss: 0.1092
+Train Acc: 0.9999, Val Acc: 0.9822
+Val TPR per class: ['0.9800', '0.9983', '0.9817', '0.9900', '0.9760', '0.9375', '0.9700', '0.9967', '0.9740', '1.0000']
+
+Early stopping at epoch 53
+Plot saved to /work/mb92adej-dl/results/run_20260104_124502/training_history_mild.png
+TEST RESULTS - MILD augmentation
+
+Test Accuracy: 0.9802
+Test TPR per class:
+  AnnualCrop: 0.9783
+  Forest: 0.9983
+  HerbaceousVegetation: 0.9800
+  Highway: 0.9840
+  Industrial: 0.9780
+  Pasture: 0.9525
+  PermanentCrop: 0.9540
+  Residential: 0.9900
+  River: 0.9720
+  SeaLake: 1.0000
+
+✓ New best model saved: /work/mb92adej-dl/results/run_20260104_124502/best_model_mild.pt
+
+
+==============================
+Training with ADVANCED augmentation
+==============================
+
+Train set size: 16200
+Val set size: 5400
+Test set size: 5400
+
+Model: ResNet50LateFusion
+
+
+Epoch 1/100
+Train Loss: 0.5544, Val Loss: 0.3509
+Train Acc: 0.8357, Val Acc: 0.8937
+Val TPR per class: ['0.9000', '0.9400', '0.7733', '0.7420', '0.9680', '0.8200', '0.8640', '0.9850', '0.9060', '0.9983']
+✓ Best model updated (Val Acc: 0.8937)
+
+Epoch 2/100
+Train Loss: 0.3317, Val Loss: 0.2111
+Train Acc: 0.8952, Val Acc: 0.9352
+Val TPR per class: ['0.8550', '0.9667', '0.9283', '0.9700', '0.9100', '0.9525', '0.8400', '0.9567', '0.9740', '0.9967']
+✓ Best model updated (Val Acc: 0.9352)
+
+Epoch 3/100
+Train Loss: 0.2723, Val Loss: 0.2058
+Train Acc: 0.9175, Val Acc: 0.9328
+Val TPR per class: ['0.8533', '0.9800', '0.8183', '0.9300', '0.9800', '0.9925', '0.8340', '0.9883', '0.9880', '0.9833']
+
+Epoch 4/100
+Train Loss: 0.2580, Val Loss: 0.1814
+Train Acc: 0.9210, Val Acc: 0.9398
+Val TPR per class: ['0.9483', '0.9950', '0.8433', '0.9820', '0.9220', '0.8650', '0.8620', '0.9917', '0.9840', '0.9783']
+✓ Best model updated (Val Acc: 0.9398)
+
+Epoch 5/100
+Train Loss: 0.2365, Val Loss: 0.2223
+Train Acc: 0.9261, Val Acc: 0.9289
+Val TPR per class: ['0.8833', '0.9933', '0.8833', '0.9920', '0.9180', '0.8500', '0.8400', '0.9967', '0.9240', '0.9750']
+
+Epoch 6/100
+Train Loss: 0.2221, Val Loss: 0.1805
+Train Acc: 0.9289, Val Acc: 0.9478
+Val TPR per class: ['0.9633', '0.9983', '0.9200', '0.9540', '0.9800', '0.8725', '0.8460', '0.9867', '0.9740', '0.9517']
+✓ Best model updated (Val Acc: 0.9478)
+
+Epoch 7/100
+Train Loss: 0.2060, Val Loss: 0.1759
+Train Acc: 0.9365, Val Acc: 0.9406
+Val TPR per class: ['0.9267', '0.9867', '0.9317', '0.9960', '0.9900', '0.8950', '0.7780', '0.9567', '0.9340', '0.9850']
+
+Epoch 8/100
+Train Loss: 0.2183, Val Loss: 0.2767
+Train Acc: 0.9328, Val Acc: 0.9243
+Val TPR per class: ['0.9383', '0.9500', '0.6750', '0.9780', '0.9360', '0.9975', '0.8380', '0.9950', '0.9620', '1.0000']
+
+Epoch 9/100
+Train Loss: 0.2071, Val Loss: 0.4173
+Train Acc: 0.9338, Val Acc: 0.8928
+Val TPR per class: ['0.8733', '0.9333', '0.6617', '0.9460', '0.9460', '0.8775', '0.7280', '0.9983', '0.9820', '0.9817']
+
+Epoch 10/100
+Train Loss: 0.1946, Val Loss: 0.1781
+Train Acc: 0.9390, Val Acc: 0.9457
+Val TPR per class: ['0.8983', '0.9800', '0.8617', '0.9360', '0.9720', '0.9175', '0.9160', '0.9967', '0.9800', '0.9933']
+
+Epoch 11/100
+Train Loss: 0.1204, Val Loss: 0.1032
+Train Acc: 0.9606, Val Acc: 0.9657
+Val TPR per class: ['0.9183', '0.9933', '0.9717', '0.9880', '0.9840', '0.9150', '0.9060', '0.9917', '0.9800', '0.9917']
+✓ Best model updated (Val Acc: 0.9657)
+
+Epoch 12/100
+Train Loss: 0.1083, Val Loss: 0.0965
+Train Acc: 0.9630, Val Acc: 0.9663
+Val TPR per class: ['0.9250', '1.0000', '0.9367', '0.9600', '0.9760', '0.9175', '0.9500', '0.9967', '0.9940', '0.9933']
+✓ Best model updated (Val Acc: 0.9663)
+
+Epoch 13/100
+Train Loss: 0.1089, Val Loss: 0.0836
+Train Acc: 0.9652, Val Acc: 0.9733
+Val TPR per class: ['0.9383', '0.9917', '0.9250', '0.9860', '0.9920', '0.9675', '0.9820', '0.9917', '0.9880', '0.9783']
+✓ Best model updated (Val Acc: 0.9733)
+
+Epoch 14/100
+Train Loss: 0.1023, Val Loss: 0.0954
+Train Acc: 0.9665, Val Acc: 0.9678
+Val TPR per class: ['0.9483', '0.9883', '0.9533', '0.9820', '0.9680', '0.9375', '0.9280', '0.9933', '0.9820', '0.9850']
+
+Epoch 15/100
+Train Loss: 0.1019, Val Loss: 0.0789
+Train Acc: 0.9659, Val Acc: 0.9726
+Val TPR per class: ['0.9433', '1.0000', '0.9467', '0.9760', '0.9880', '0.9425', '0.9580', '0.9967', '0.9840', '0.9833']
+
+Epoch 16/100
+Train Loss: 0.0991, Val Loss: 0.2441
+Train Acc: 0.9658, Val Acc: 0.9563
+Val TPR per class: ['0.8867', '0.9900', '0.9317', '0.9920', '0.9800', '0.9575', '0.8840', '0.9733', '0.9720', '0.9967']
+
+Epoch 17/100
+Train Loss: 0.0966, Val Loss: 0.1078
+Train Acc: 0.9690, Val Acc: 0.9678
+Val TPR per class: ['0.9817', '0.9867', '0.9550', '0.9900', '0.9840', '0.9300', '0.8620', '0.9967', '0.9760', '0.9933']
+
+Epoch 18/100
+Train Loss: 0.0688, Val Loss: 0.0735
+Train Acc: 0.9764, Val Acc: 0.9765
+Val TPR per class: ['0.9650', '0.9983', '0.9367', '0.9880', '0.9580', '0.9475', '0.9760', '0.9983', '0.9900', '0.9983']
+✓ Best model updated (Val Acc: 0.9765)
+
+Epoch 19/100
+Train Loss: 0.0643, Val Loss: 0.0612
+Train Acc: 0.9791, Val Acc: 0.9817
+Val TPR per class: ['0.9750', '0.9950', '0.9700', '0.9840', '0.9940', '0.9325', '0.9700', '0.9950', '0.9920', '0.9950']
+✓ Best model updated (Val Acc: 0.9817)
+
+Epoch 20/100
+Train Loss: 0.0606, Val Loss: 0.0710
+Train Acc: 0.9799, Val Acc: 0.9781
+Val TPR per class: ['0.9683', '1.0000', '0.9317', '0.9920', '0.9800', '0.9625', '0.9640', '0.9983', '0.9880', '0.9933']
+
+Epoch 21/100
+Train Loss: 0.0545, Val Loss: 0.0575
+Train Acc: 0.9815, Val Acc: 0.9800
+Val TPR per class: ['0.9650', '0.9950', '0.9700', '0.9880', '0.9860', '0.9400', '0.9740', '0.9917', '0.9860', '0.9933']
+
+Epoch 22/100
+Train Loss: 0.0559, Val Loss: 0.0995
+Train Acc: 0.9809, Val Acc: 0.9698
+Val TPR per class: ['0.9617', '0.9983', '0.9133', '0.9860', '0.9540', '0.9725', '0.9240', '0.9983', '0.9940', '0.9933']
+
+Epoch 23/100
+Train Loss: 0.0548, Val Loss: 0.0730
+Train Acc: 0.9803, Val Acc: 0.9763
+Val TPR per class: ['0.9400', '0.9983', '0.9550', '0.9840', '0.9820', '0.9400', '0.9660', '0.9967', '0.9920', '1.0000']
+
+Epoch 24/100
+Train Loss: 0.0393, Val Loss: 0.0647
+Train Acc: 0.9867, Val Acc: 0.9802
+Val TPR per class: ['0.9600', '0.9967', '0.9683', '0.9880', '0.9940', '0.9325', '0.9760', '0.9967', '0.9900', '0.9883']
+
+Epoch 25/100
+Train Loss: 0.0363, Val Loss: 0.0637
+Train Acc: 0.9877, Val Acc: 0.9811
+Val TPR per class: ['0.9567', '0.9967', '0.9567', '0.9920', '0.9840', '0.9650', '0.9820', '0.9917', '0.9860', '0.9983']
+
+Epoch 26/100
+Train Loss: 0.0356, Val Loss: 0.0595
+Train Acc: 0.9879, Val Acc: 0.9828
+Val TPR per class: ['0.9717', '0.9967', '0.9600', '0.9900', '0.9940', '0.9500', '0.9780', '0.9933', '0.9940', '0.9933']
+✓ Best model updated (Val Acc: 0.9828)
+
+Epoch 27/100
+Train Loss: 0.0320, Val Loss: 0.0645
+Train Acc: 0.9890, Val Acc: 0.9807
+Val TPR per class: ['0.9633', '0.9983', '0.9700', '0.9900', '0.9540', '0.9550', '0.9740', '0.9983', '0.9960', '0.9983']
+
+Epoch 28/100
+Train Loss: 0.0318, Val Loss: 0.0521
+Train Acc: 0.9885, Val Acc: 0.9850
+Val TPR per class: ['0.9717', '0.9967', '0.9783', '0.9960', '0.9760', '0.9800', '0.9740', '0.9983', '0.9900', '0.9867']
+✓ Best model updated (Val Acc: 0.9850)
+
+Epoch 29/100
+Train Loss: 0.0330, Val Loss: 0.0639
+Train Acc: 0.9879, Val Acc: 0.9833
+Val TPR per class: ['0.9700', '0.9983', '0.9750', '0.9940', '0.9820', '0.9475', '0.9740', '1.0000', '0.9880', '0.9933']
+
+Epoch 30/100
+Train Loss: 0.0310, Val Loss: 0.0579
+Train Acc: 0.9902, Val Acc: 0.9856
+Val TPR per class: ['0.9833', '0.9983', '0.9717', '0.9940', '0.9900', '0.9625', '0.9680', '0.9967', '0.9900', '0.9933']
+✓ Best model updated (Val Acc: 0.9856)
+
+Epoch 31/100
+Train Loss: 0.0315, Val Loss: 0.0738
+Train Acc: 0.9889, Val Acc: 0.9819
+Val TPR per class: ['0.9583', '0.9967', '0.9600', '0.9980', '0.9840', '0.9675', '0.9720', '0.9950', '0.9860', '0.9983']
+
+Epoch 32/100
+Train Loss: 0.0319, Val Loss: 0.0705
+Train Acc: 0.9890, Val Acc: 0.9804
+Val TPR per class: ['0.9700', '0.9967', '0.9700', '0.9960', '0.9620', '0.9450', '0.9720', '0.9967', '0.9860', '0.9967']
+
+Epoch 33/100
+Train Loss: 0.0271, Val Loss: 0.0711
+Train Acc: 0.9905, Val Acc: 0.9813
+Val TPR per class: ['0.9733', '0.9967', '0.9833', '0.9960', '0.9660', '0.9350', '0.9680', '0.9983', '0.9820', '0.9967']
+
+Epoch 34/100
+Train Loss: 0.0291, Val Loss: 0.0959
+Train Acc: 0.9896, Val Acc: 0.9820
+Val TPR per class: ['0.9717', '0.9833', '0.9683', '0.9940', '0.9860', '0.9625', '0.9760', '1.0000', '0.9860', '0.9883']
+
+Epoch 35/100
+Train Loss: 0.0231, Val Loss: 0.0936
+Train Acc: 0.9923, Val Acc: 0.9809
+Val TPR per class: ['0.9750', '0.9850', '0.9767', '0.9940', '0.9700', '0.9625', '0.9620', '0.9983', '0.9800', '0.9967']
+
+Epoch 36/100
+Train Loss: 0.0200, Val Loss: 0.0677
+Train Acc: 0.9928, Val Acc: 0.9824
+Val TPR per class: ['0.9650', '0.9950', '0.9667', '0.9940', '0.9860', '0.9600', '0.9760', '0.9983', '0.9840', '0.9933']
+
+Epoch 37/100
+Train Loss: 0.0225, Val Loss: 0.0665
+Train Acc: 0.9921, Val Acc: 0.9835
+Val TPR per class: ['0.9700', '0.9967', '0.9717', '0.9940', '0.9860', '0.9600', '0.9780', '0.9983', '0.9800', '0.9933']
+
+Epoch 38/100
+Train Loss: 0.0218, Val Loss: 0.0662
+Train Acc: 0.9927, Val Acc: 0.9811
+Val TPR per class: ['0.9633', '0.9950', '0.9750', '0.9940', '0.9800', '0.9400', '0.9800', '0.9983', '0.9840', '0.9900']
+
+Epoch 39/100
+Train Loss: 0.0170, Val Loss: 0.0614
+Train Acc: 0.9946, Val Acc: 0.9835
+Val TPR per class: ['0.9767', '0.9983', '0.9733', '0.9940', '0.9780', '0.9600', '0.9740', '0.9983', '0.9800', '0.9933']
+
+Epoch 40/100
+Train Loss: 0.0160, Val Loss: 0.0725
+Train Acc: 0.9939, Val Acc: 0.9806
+Val TPR per class: ['0.9650', '0.9967', '0.9650', '0.9920', '0.9740', '0.9475', '0.9780', '0.9983', '0.9860', '0.9933']
+
+Early stopping at epoch 40
+Plot saved to /work/mb92adej-dl/results/run_20260104_124502/training_history_advanced.png
+TEST RESULTS - ADVANCED augmentation
+
+Test Accuracy: 0.9837
+Test TPR per class:
+  AnnualCrop: 0.9617
+  Forest: 0.9983
+  HerbaceousVegetation: 0.9817
+  Highway: 0.9920
+  Industrial: 0.9620
+  Pasture: 0.9575
+  PermanentCrop: 0.9840
+  Residential: 1.0000
+  River: 0.9940
+  SeaLake: 0.9967
+
+✓ New best model saved: /work/mb92adej-dl/results/run_20260104_124502/best_model_advanced.pt
+
+
+Results saved to /work/mb92adej-dl/results/run_20260104_124502/training_results.json
+Test logits saved to /work/mb92adej-dl/results/run_20260104_124502/test_logits_best_model.npy
+
+==============================
+SUMMARY
+==============================
+Best augmentation: advanced
+Best validation accuracy: 0.9856
+Model saved to: /work/mb92adej-dl/results/run_20260104_124502/best_model_advanced.pt
+Results directory: /work/mb92adej-dl/results/run_20260104_124502
+
+[✓] TASK 3 - Fine-tuning completed

@@ -75,13 +75,13 @@ python -m src.task2.reproduce -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 ### Task 3
 
 #### Fine tune model
-
+Fine-tune model for TIF data. When script is run, a new directory named `run_YYYYMMDD_hhmmss` is created and hyper parameters from `constants.py` are used for training.
 ```sh
 python -m src.task3.fine_tune -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
 
-#### Test saved model from task3
-
+####Test saved model for reproducibility and perform visual ranking check
+Load the saved model at `./results/task3_finetuned/best_model.pt`. Runs predictions on model on test split and prints results to terminal.
 ```sh
 python -m src.task3.reproduce -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
@@ -93,9 +93,13 @@ python -m src.task3.reproduce -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 3. Create a conda environment named `dl_coding_task`, activate it, and run `pip -r install requirements.txt`
 
 ### Run
-
+**Important:** Before start you need to write your `/work`-dir in the code.
+Moreover add:
+```sh
+#SBATCH --output=/work/<WORKDIR>/task<X>.out
+#SBATCH --error=/work/<WORKDIR>/task<X>.err
+```
 #### Task 1
-
 ```sh
 sbatch hpc/task1.slurm
 ```
@@ -103,13 +107,12 @@ sbatch hpc/task1.slurm
 ### Task 2
 #### Fine-Tune
 ```sh
-sbatch hpc/task2_1.slurm
+sbatch hpc/task2.slurm
 ```
-
 
 ### Task 3
 #### Fine-Tune
 ```sh
-sbatch hpc/task3_1.slurm
+sbatch hpc/task3.slurm
 ```
 

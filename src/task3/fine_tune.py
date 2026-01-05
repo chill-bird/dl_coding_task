@@ -23,6 +23,7 @@ from src.constants import (
     SEED,
     SPLIT_FILES,
     LOGITS_TEST_SET_FILE,
+    TRAIN_FILE
 )
 from src.task3._data_loader import dataloaders
 from src.task3._model import get_model
@@ -32,39 +33,12 @@ from src.util.paths import results_parent_dir, root_path
 from src.util.run_config import get_dat_dir_args
 from src.util.seed import set_seed
 from src.task3._normalize_multi_channel import NormalizeMultiChannel
-
-# Data augmentations for model selection
-AUGMENTATIONS = {
-    "mild": transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.RandomHorizontalFlip(p=0.5),
-            
-            NormalizeMultiChannel()
-        ]
-    ),
-    "advanced": transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomVerticalFlip(p=0.3),
-            transforms.RandomRotation(20),
-            transforms.RandomAffine(degrees=15, translate=(0.1, 0.1), scale=(0.8, 1.2)),
-            transforms.GaussianBlur(kernel_size=3, sigma=(0.1, 2.0)),
-            
-            NormalizeMultiChannel()   
-        ]
-    ),
-    "val": transforms.Compose(
-        [
-            transforms.ToTensor(),
-            NormalizeMultiChannel()
-        ]
-    ),
-}
+from src.task3._compute_ms_stats import read_split_csv, compute_channel_meanstd
 
 
-def calculate_metrics(outputs: torch.Tensor, targets: torch.Tensor) -> tuple[float, list[float]]:
+def calculate_metrics(
+    outputs: torch.Tensor, targets: torch.Tensor
+) -> tuple[float, list[float]]:
     """Calculate accuracy and per-class TPR (True Positive Rate)."""
 
     _, predicted = torch.max(outputs, 1)
@@ -77,7 +51,9 @@ def calculate_metrics(outputs: torch.Tensor, targets: torch.Tensor) -> tuple[flo
     tpr_per_class = []
 
     for class_idx in range(num_classes):
-        true_positives = ((predicted == class_idx) & (targets == class_idx)).sum().item()
+        true_positives = (
+            ((predicted == class_idx) & (targets == class_idx)).sum().item()
+        )
         total_positives = (targets == class_idx).sum().item()
         tpr = true_positives / total_positives if total_positives > 0 else 0.0
         tpr_per_class.append(tpr)
@@ -194,7 +170,7 @@ def train_model(
         history["train_tpr"].append(train_tpr)
         history["val_tpr"].append(val_tpr)
 
-        print(f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
+        print(f"Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
         print(f"Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}")
         print(f"Val TPR per class: {[f'{tpr:.4f}' for tpr in val_tpr]}")
 
@@ -292,6 +268,41 @@ def fine_tune(
     print(f"Classes: {index_to_class}\n")
     print(f"Number of classes: {num_classes}")
 
+    # compute multichannel stats
+    train_csv = Path(dataset_dir/TRAIN_FILE)
+    train_pairs = read_split_csv(train_csv)
+    mean, std = compute_channel_meanstd(train_pairs, dataset_dir, 13)
+    out_path = Path(output_dir/"ms_stats.json")
+    out_path.write_text(json.dumps({"mean": mean.tolist(), "std": std.tolist()}, indent=2))
+
+    print("Saved stats to:", out_path)
+
+    # create normalize multichannel
+    nmc = NormalizeMultiChannel(out_path)
+
+    # create augmentations
+    augmentations = {
+        "mild": transforms.Compose(
+            [
+                transforms.ToTensor(),
+                transforms.RandomHorizontalFlip(p=0.5),
+                nmc,
+            ]
+        ),
+        "advanced": transforms.Compose(
+            [
+                transforms.ToTensor(),
+                transforms.RandomHorizontalFlip(p=0.5),
+                transforms.RandomVerticalFlip(p=0.3),
+                transforms.RandomRotation(20),
+                transforms.RandomAffine(degrees=15, translate=(0.1, 0.1), scale=(0.8, 1.2)),
+                transforms.GaussianBlur(kernel_size=3, sigma=(0.1, 2.0)),
+                nmc,
+            ]
+        ),
+        "val": transforms.Compose([transforms.ToTensor(), nmc]),
+    }
+
     # Train models with different augmentations
     all_results = {}
     best_model_path = None
@@ -308,7 +319,7 @@ def fine_tune(
             dataset_dir=dataset_dir,
             split_files=split_files,
             img_format=img_format,
-            aug_dict=AUGMENTATIONS,
+            aug_dict=augmentations,
             aug_name=augmentation_name,
             batch_size=batch_size,
         )
@@ -350,7 +361,9 @@ def fine_tune(
             "test_accuracy": float(test_accuracy),
             "test_tpr": [float(t) for t in test_tpr],
             "val_accuracy": [float(a) for a in history["val_accuracy"]],
-            "val_tpr": [[float(t) for t in tpr_list] for tpr_list in history["val_tpr"]],
+            "val_tpr": [
+                [float(t) for t in tpr_list] for tpr_list in history["val_tpr"]
+            ],
         }
         all_results[augmentation_name] = results
 
@@ -401,7 +414,9 @@ def run():
     dat_dir = get_dat_dir_args()
     dataset_dir = dat_dir / TIF_DATASET_DIR_NAME
 
-    print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {img_format}\n")
+    print(
+        f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {img_format}\n"
+    )
 
     # Run Task 3: Fine-tune model
     fine_tune(

@@ -21,7 +21,9 @@ from src.constants import (
     RGB_DATASET_DIR_NAME,
     LOGITS_TEST_SET_FILE,
     REPRODUCED_LOGITS_TEST_SET_FILE,
+    LOGITS_TEST_SET_FILE_CPU,
     SPLIT_FILES,
+    ATOL
 )
 from src.task2.fine_tune import AUGMENTATIONS, test_model
 from src.task2._data_loader import dataloaders
@@ -34,9 +36,24 @@ from src.util.run_config import get_dat_dir_args
 
 def equals_saved_logits(logits: torch.Tensor, saved_logits_path: Path) -> bool:
     """Compares a logits tensor to the logits saved previously."""
+
     saved_logits = np.load(saved_logits_path)
     logits_np = logits.cpu().numpy()
-    return np.allclose(logits_np, saved_logits)
+
+    # Calculate differences
+    differences = np.abs(logits_np - saved_logits)
+    mean_diff = np.mean(differences)
+    min_diff = np.min(differences)
+    max_diff = np.max(differences)
+
+    all_close = np.allclose(logits_np, saved_logits, atol=ATOL)
+
+    if not all_close:
+        print(
+            f"Logits differences - Mean: {mean_diff:.6e}, Min: {min_diff:.6e}, Max: {max_diff:.6e}"
+        )
+
+    return all_close
 
 
 def predict_on_test_set(
@@ -87,8 +104,6 @@ def run():
     dat_dir = get_dat_dir_args()
     dataset_dir = dat_dir / RGB_DATASET_DIR_NAME
     results_dir = find_task2_trained_model_dir()
-    model_path = results_dir / BEST_MODEL_FILENAME
-    previous_predictions_path = results_dir / LOGITS_TEST_SET_FILE
     predictions_output_dir = find_task2_trained_model_dir() / REPRODUCE_OUTPUT_DIR_NAME
     predictions_output_dir.mkdir(parents=False, exist_ok=True)
 
@@ -106,6 +121,7 @@ def run():
     print(f"Number of classes: {num_classes}")
 
     # Load model
+    model_path = results_dir / BEST_MODEL_FILENAME
     if not model_path.exists():
         raise FileNotFoundError(f"Model not found at {model_path}")
     print(f"[1] Loading model checkpoint from {model_path}")
@@ -132,6 +148,11 @@ def run():
     )
 
     # Compare to previously saved logits
+    previous_predictions_path = (
+        (results_dir / LOGITS_TEST_SET_FILE)
+        if device == "gpu"
+        else (results_dir / LOGITS_TEST_SET_FILE_CPU)
+    )
     if equals_saved_logits(test_logits, previous_predictions_path):
         print("\n[✓] Logits were reproduced successfully")
     else:

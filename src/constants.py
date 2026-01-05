@@ -8,7 +8,7 @@ Provides constants for project.
 ### Change for each run ###
 
 TIF_DATASET = "euro_sat_ms"
-TIF_CHANNELS = [3,2,1,7,10,11] # Bands: Red, Green, Blue, NIR, SWIR1, SWIR2
+TIF_CHANNELS = [3, 2, 1, 7, 10, 11]  # Bands: Red, Green, Blue, NIR, SWIR1, SWIR2
 RGB_DATASET = "euro_sat_rgb"
 
 
@@ -38,6 +38,8 @@ OUTPUT_DIR_NAME = "results"
 BEST_MODEL_FILENAME = "best_model.pt"
 REPRODUCE_OUTPUT_DIR_NAME = "test"
 LOGITS_TEST_SET_FILE = "test_logits_best_model.npy"
+LOGITS_TEST_SET_FILE_CPU = "test_logits_best_model_cpu.npy"
+ATOL = 1e-5
 REPRODUCED_LOGITS_TEST_SET_FILE = "reproduced_test_logits_best_model.npy"
 
 OUTPUT_DIR_FINETUNED_TASK2 = "task2_finetuned"

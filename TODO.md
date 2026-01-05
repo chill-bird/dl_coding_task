@@ -2,10 +2,11 @@
 
 ## General
 
-- [ ] Reset `constants.py`
+- [x] Reset `constants.py`
 - [x] Change reproduce script to use dedicated directories
 - [x] Remove Flower-set
 - [x] `README.md`: Explain functionality of `reproduce` script in more detail
+- [ ] README files addden
 
 ### Nice-to-have
 
@@ -22,13 +23,13 @@
 - [x] Check assignment notes: "Channels with indices 3,2,1 (in this inverse order it is equal RGB in the MS part)"
 - [x] Change execution to current run directory instead of copying file to root directory
 - [x] Adjust prediction script to reproduce script
+- [ ] Hard coded directory for reproduce 
 
 ## Task 3
 
 ## Before Hand-in
 
 - [x] RGB mode only
-- [ ] Upload split files
 - [ ] Upload model output
 - [ ] Create PDF for Task 2:
     – the names of the team of students working on it

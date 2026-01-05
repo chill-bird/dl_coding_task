@@ -1,0 +1,53 @@
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/condabin/conda
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/bin/conda
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/bin/conda-env
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/bin/activate
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/bin/deactivate
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/etc/profile.d/conda.sh
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/etc/fish/conf.d/conda.fish
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/shell/condabin/Conda.psm1
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/shell/condabin/conda-hook.ps1
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/lib/python3.11/site-packages/xontrib/conda.xsh
+no change     /software/easybuild/el9/amd_zen1/all/Anaconda3/2024.02-1/etc/profile.d/conda.csh
+no change     /home/sc.uni-leipzig.de/mb92adej/.bashrc
+No action taken.
+Settings:
+ROOT DIR:/work/mb92adej-dl
+DAT_DIR:  /work/mb92adej-dl/dat
+============================================================
+TASK 1 - Data Splitting
+============================================================
+
+Setting seed 3780947...
+
+Unzipping all available data
+# 1Creating Splits for .jpg data...
+
+[1] Collecting labelled images from euro_sat_rgb dataset
+Found 27000 images across 10 classes
+
+[2] Creating Splits
+Training set:   16200 images ( 60.0%)
+Validation set:  5400 images ( 20.0%)
+Test set:        5400 images ( 20.0%)
+Total:          27000 images
+
+[3] Creating Split Files
+
+[4] Checking split requirements
+# 2Creating Splits for .tif data...
+
+[1] Collecting labelled images from euro_sat_ms dataset
+Found 27000 images across 10 classes
+
+[2] Creating Splits
+Training set:   16200 images ( 60.0%)
+Validation set:  5400 images ( 20.0%)
+Test set:        5400 images ( 20.0%)
+Total:          27000 images
+
+[3] Creating Split Files
+
+[4] Checking split requirements
+
+[✓] TASK 1

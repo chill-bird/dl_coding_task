@@ -8,12 +8,11 @@ Provides custom class for EuroSAT dataset.
 import pandas as pd
 from pathlib import Path
 from torch.utils.data import Dataset
-from src.task3._classname_index_mapping import class_to_index_map
+from src.task2._classname_index_mapping import class_to_index_map
 import numpy as np
 import tifffile as tiff
-from src.constants import (
-    TIF_CHANNELS
-)
+from src.constants import TIF_CHANNELS
+
 
 class MultiSpecDataset(Dataset):
     """Represents Dataset class for EuroSAT images"""
@@ -31,7 +30,9 @@ class MultiSpecDataset(Dataset):
         self.class_to_index_map = class_to_index_map(self.root_dir)
         self.samples = self.read_imgs_from_split_file()
         self.img_format = img_format
-        assert self.img_format == ".tif", "Image format must be set to '.tif' for task 3."
+        assert (
+            self.img_format == ".tif"
+        ), "Image format must be set to '.tif' for task 3."
 
     def __len__(self):
         """Sample size"""
@@ -45,9 +46,9 @@ class MultiSpecDataset(Dataset):
         img = self._load_multichannel_tiff(file_path, TIF_CHANNELS)
         img = self.transform(img)
         label = sample["label"]
-        
+
         return {"image": img, "label": label}
-    
+
     def _load_multichannel_tiff(self, file_path, selected_channels):
         """Loads a multi-channel TIFF image and selects specified channels."""
 

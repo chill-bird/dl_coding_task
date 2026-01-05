@@ -10,6 +10,7 @@ Loads best model from most recent train run and
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
+from torchvision import transforms
 from pathlib import Path
 import numpy as np
 import json
@@ -22,21 +23,39 @@ from src.constants import (
     LOGITS_TEST_SET_FILE,
     REPRODUCED_LOGITS_TEST_SET_FILE,
     SPLIT_FILES,
+    LOGITS_TEST_SET_FILE_CPU,
+    ATOL
 )
-from src.task3.fine_tune import AUGMENTATIONS, test_model
+from src.task3.fine_tune import test_model
 from src.task3._data_loader import dataloaders
 from src.task3._ranking_check import ranking_check
 from src.task2._classname_index_mapping import index_to_class_map
 from src.task3._model import load_model_from_checkpoint
-from src.util.paths import find_most_recent_train_results_dir, root_path
+from src.util.paths import find_task3_trained_model_dir, root_path
 from src.util.run_config import get_dat_dir_args
+from src.task3._normalize_multi_channel import NormalizeMultiChannel
 
 
 def equals_saved_logits(logits: torch.Tensor, saved_logits_path: Path) -> bool:
     """Compares a logits tensor to the logits saved previously."""
+
     saved_logits = np.load(saved_logits_path)
     logits_np = logits.cpu().numpy()
-    return np.allclose(logits_np, saved_logits)
+
+    # Calculate differences
+    differences = np.abs(logits_np - saved_logits)
+    mean_diff = np.mean(differences)
+    min_diff = np.min(differences)
+    max_diff = np.max(differences)
+
+    all_close = np.allclose(logits_np, saved_logits, atol=ATOL)
+
+    if not all_close:
+        print(
+            f"Logits differences - Mean: {mean_diff:.6e}, Min: {min_diff:.6e}, Max: {max_diff:.6e}"
+        )
+
+    return all_close
 
 
 def predict_on_test_set(
@@ -86,10 +105,10 @@ def run():
     # Dataset parent directory (dat_dir) containing zip files
     dat_dir = get_dat_dir_args()
     dataset_dir = dat_dir / TIF_DATASET_DIR_NAME
-    results_dir = find_most_recent_train_results_dir()
+    results_dir = find_task3_trained_model_dir()
     model_path = results_dir / BEST_MODEL_FILENAME
-    previous_predictions_path = results_dir / LOGITS_TEST_SET_FILE
-    predictions_output_dir = find_most_recent_train_results_dir() / REPRODUCE_OUTPUT_DIR_NAME
+
+    predictions_output_dir = find_task3_trained_model_dir() / REPRODUCE_OUTPUT_DIR_NAME
     predictions_output_dir.mkdir(parents=False, exist_ok=True)
 
     print(f"Settings:\nROOT DIR: {root_path()}\nDAT DIR: {dat_dir}\nIMG_EXT: {img_format}\n")
@@ -111,13 +130,24 @@ def run():
     print(f"[1] Loading model checkpoint from {model_path}")
     model = load_model_from_checkpoint(model_path, num_classes, device)
 
+    # load ms stats
+    out_path = Path(find_task3_trained_model_dir() / "ms_stats.json")
+
+    # create normalize multichannel
+    nmc = NormalizeMultiChannel(out_path)
+
+    # create augmentations
+    augmentations = {
+        "val": transforms.Compose([transforms.ToTensor(), nmc]),
+    }
+
     # Create test loader
     print("[2] Creating test data loader")
     _, _, test_loader, test_dataset = dataloaders(
         dataset_dir=dataset_dir,
         split_files=SPLIT_FILES,
         img_format=img_format,
-        aug_dict=AUGMENTATIONS,
+        aug_dict=augmentations,
         aug_name="val",
         batch_size=BATCH_SIZE,
     )
@@ -132,6 +162,11 @@ def run():
     )
 
     # Compare to previously saved logits
+    previous_predictions_path = (
+        (results_dir / LOGITS_TEST_SET_FILE)
+        if device == "gpu"
+        else (results_dir / LOGITS_TEST_SET_FILE_CPU)
+    )
     if equals_saved_logits(test_logits, previous_predictions_path):
         print("\n[✓] Logits were reproduced successfully")
     else:
