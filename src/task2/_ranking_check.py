@@ -68,6 +68,12 @@ def find_top_bottom_images(
         results[class_name] = {
             "top_5": top_5_indices.tolist(),
             "bottom_5": bottom_5_indices.tolist(),
+            "top_5_image_paths": [
+                test_dataset.samples[idx]["file"].name for idx in top_5_indices.tolist()
+            ],
+            "bottom_5_image_paths": [
+                test_dataset.samples[idx]["file"].name for idx in bottom_5_indices.tolist()
+            ],
             "top_5_scores": class_scores[top_5_indices].numpy().tolist(),
             "bottom_5_scores": class_scores[bottom_5_indices].numpy().tolist(),
         }
