@@ -31,6 +31,7 @@
 
 - [x] RGB mode only
 - [ ] Upload model output
+- [ ] Upload models
 - [ ] Create PDF for Task 2:
     – the names of the team of students working on it
     – what parameters need to be set, so that we can run your code
