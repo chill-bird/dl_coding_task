@@ -72,7 +72,7 @@ python -m src.task2.fine_tune -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 
 ## Training Performance
 
-[Training History](doc/imgs/training_history_mild.png)
+![Training History](/doc/imgs/training_history_mild.png)
 
 ## Test Performance
 
@@ -98,12 +98,12 @@ python -m src.task2.fine_tune -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 
 ### 0 - Annual Crop
 
-[Top and Bottom Annual Crop](/doc/imgs/top_bottom_images_AnnualCrop.png)
+![Top and Bottom Annual Crop](/doc/imgs/top_bottom_images_AnnualCrop.png)
 
 ### 1 - Forest
 
-[Top and Bottom Forest](/doc/imgs/top_bottom_images_Forest.png)
+![Top and Bottom Forest](/doc/imgs/top_bottom_images_Forest.png)
 
 ### 2 - Herbaceous Vegetation
 
-[Top and Herbaceous Vegetation](/doc/imgs/top_bottom_images_HerbaceousVegetation.png)
+![Top and Herbaceous Vegetation](/doc/imgs/top_bottom_images_HerbaceousVegetation.png)

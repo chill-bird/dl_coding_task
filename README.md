@@ -5,18 +5,20 @@
 ```sh
 .
 ├── dat/  # Default directory for dataset
-├── doc/  # Assignment documentation
+├── doc/  # Assignment & results documentation
 ├── hpc/  # Slurm-scripts for high performance computing
 ├── results/  # Results task 2
 │   └── task2_finetuned/  # Fine-tuned model for hand-in (Task 2) 
 │       └── best_model.pt  # Trained model from the two augmentations
 │       └── test_logits_best_model.npy  # Saved logits on test split
+│       └── test_logits_best_model_cpu.npy  # Saved logits on test split for CPU model
 │       └── training_history_**.png  # Training history for each augmentation
 │       └── training_results.json  # JSON dump for training history on both augmentation
 │       └── test/  # Directory which is created when reproduction script is run
 │   └── task3_finetuned/  # Fine-tuned model for hand-in (Task 3) 
 │       └── best_model.pt  # Trained model from the two augmentations
 │       └── test_logits_best_model.npy  # Saved logits on test split
+│       └── test_logits_best_model_cpu.npy  # Saved logits on test split for CPU model
 │       └── training_history_**.png  # Training history for each augmentation
 │       └── training_results.json  # JSON dump for training history on both augmentation
 │       └── test/  # Directory which is created when reproduction script is run│   └── run_YYYYMMDD_hhmmss/  # New run of fine-tuning script 
@@ -56,6 +58,8 @@ python -m src.task1.split_data -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 
 ### Task 2
 
+For detailed documentation of task 2 and 3 results, see `/doc` directory.
+
 This project has fine-tuned [ResNet50](https://arxiv.org/abs/1512.03385) model on image classification on the [EuroSAT Dataset](https://ieeexplore.ieee.org/document/8736785). The model is provided as `.pt` file in `results/task2_finetuned/best_model.pt`.
 
 #### Test provided model for reproducibility and perform visual ranking check
@@ -85,6 +89,7 @@ python -m src.task3.fine_tune -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
 
 #### Test saved model for reproducibility and perform visual ranking check
+
 Load the saved model at `./results/task3_finetuned/best_model.pt`. Runs predictions on model on test split and prints results to terminal.
 
 ```sh
