@@ -54,7 +54,9 @@ Load the saved model at `./results/task3_finetuned/best_model.pt`. Runs predicti
 ```sh
 python -m src.task3.reproduce -D <ABSOLUTE_PATH_TO_DAT_DIR_>
 ```
+## Training Performance
 
+[Training History](doc/imgs/training_history_advanced.png)
 ## Test Performance
 ```json
 {
